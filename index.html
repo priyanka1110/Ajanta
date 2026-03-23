@@ -4,7 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ajanta Mobility Solutions – Motion Restored, Lives Rebuilt</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" href="ajanta-logo.png">
+  <link rel="apple-touch-icon" href="ajanta-logo.png">
+  <meta name="theme-color" content="#1565c0">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600;700&display=swap');
 
@@ -81,6 +84,8 @@
     position:relative;
   }
   .nav-links > li > a:hover { color:var(--orange); }
+  .nav-links > li > a[style*="cursor:default"]:hover { color:var(--navy); }
+  .nav-links > li > a[style*="cursor:default"]::after { display:none !important; }
   .nav-links > li > a.active { color:var(--orange); }
   .nav-links > li > a::after {
     content:''; position:absolute; bottom:8px; left:17px; right:17px;
@@ -91,16 +96,18 @@
   .nav-links > li > a:hover::after,
   .nav-links > li > a.active::after { width:calc(100% - 34px); }
   .dropdown {
-    display:none; position:absolute; top:calc(100% + 6px); left:0;
+    display:block; position:absolute; top:100%; left:0;
     background:rgba(255,255,255,0.98);
     backdrop-filter:blur(20px);
     box-shadow:0 20px 60px rgba(21,101,192,.15), 0 0 0 1px rgba(21,101,192,.06);
-    min-width:230px; border-radius:12px; overflow:hidden; z-index:999;
-    transform:translateY(-6px); opacity:0; pointer-events:none;
-    transition:all .25s cubic-bezier(.4,0,.2,1);
+    min-width:230px; border-radius:0 0 12px 12px; overflow:hidden; z-index:999;
+    transform:translateY(-8px); opacity:0; pointer-events:none;
+    transition:opacity .2s ease, transform .2s ease;
+    visibility:hidden;
   }
-  .nav-links > li:hover .dropdown {
-    display:block; transform:translateY(0); opacity:1; pointer-events:all;
+  /* dropdown shown via JS .open class */
+  .nav-links > li .dropdown.open {
+    transform:translateY(0); opacity:1; pointer-events:all; visibility:visible;
   }
   .dropdown a {
     display:flex; align-items:center; gap:10px;
@@ -785,7 +792,7 @@
   <div class="container">
     <div class="topbar-contact">
       <span>📞 <a href="tel:+916360893487" style="color:#9ab0d4;text-decoration:none;">+91 63608 93487</a></span>
-      <span class="topbar-hide-sm">✉️ <a href="mailto:ajantapobhopal@gmail.com" style="color:#9ab0d4;text-decoration:none;">ajantapobhopal@gmail.com</a></span>
+      <span class="topbar-hide-sm">✉️ <a href="/cdn-cgi/l/email-protection#37565d565943564758555f5847565b77505a565e5b1954585a" style="color:#9ab0d4;text-decoration:none;"><span class="__cf_email__" data-cfemail="90f1faf1fee4f1e0fff2f8ffe0f1fcd0f7fdf1f9fcbef3fffd">[email&#160;protected]</span></a></span>
       <span class="topbar-hide-sm">🕐 Mon–Sat: 9am – 6pm</span>
     </div>
     <div class="topbar-social">
@@ -814,12 +821,13 @@
       </button>
       <ul class="nav-links" id="navLinks">
         <li><a href="#" class="active" onclick="showPage('home',this)">Home</a></li>
-        <li>
-          <a href="javascript:void(0)" onclick="showPage('services',this)">Services ▾</a>
-          <div class="dropdown">
-            <a href="javascript:void(0)" onclick="showPage('services',this)">Prosthetics</a>
-            <a href="javascript:void(0)" onclick="showPage('services',this)">Orthotics</a>
-            <a href="javascript:void(0)" onclick="showPage('services',this)">Pediatrics</a>
+        <li id="servicesMenu" onmouseenter="openDropdown()" onmouseleave="closeDropdown()">
+          <a href="javascript:void(0)" onclick="return false;" style="cursor:default;user-select:none;">Services ▾</a>
+          <div class="dropdown" id="servicesDropdown">
+            <a href="javascript:void(0)" onclick="goToService('section-prosthetics')">Prosthetics</a>
+            <a href="javascript:void(0)" onclick="goToService('section-orthotics')">Orthotics</a>
+            <a href="javascript:void(0)" onclick="goToService('section-pediatrics')">Pediatrics</a>
+            <a href="javascript:void(0)" onclick="goToService('section-diabetic')">Diabetic & Compression</a>
           </div>
         </li>
         <li><a href="javascript:void(0)" onclick="showPage('journey',this)">Patient Journey</a></li>
@@ -844,7 +852,7 @@
         <p class="hero-sub">Advanced Prosthetic & Orthotic rehabilitation services, precision-engineered to the unique physiological needs of every individual.</p>
         <div class="hero-btns">
           <a href="#" class="btn btn-primary" onclick="showPage('contact',null)">Book a Consultation</a>
-          <a href="#" class="btn btn-outline" onclick="showPage('services',null)">Our Services</a>
+          <a href="#" class="btn btn-outline" onclick="goToService('section-prosthetics')">Our Services</a>
         </div>
         <div class="hero-stats">
           <div class="stat-item">
@@ -933,7 +941,7 @@
           <div class="service-card-body">
             <h3>Prosthetic Solutions</h3>
             <p>Advanced lower and upper limb prosthetic systems including microprocessor-controlled, hydraulic, and myoelectric technologies tailored to your functional goals.</p>
-            <a href="#" class="btn-link" onclick="showPage('services',null)">Learn More →</a>
+            <a href="javascript:void(0)" class="btn-link" onclick="goToService('section-orthotics')">Learn More →</a>
           </div>
         </div>
         <div class="service-card">
@@ -944,7 +952,7 @@
           <div class="service-card-body">
             <h3>Orthotic Devices</h3>
             <p>Custom spinal, lower-limb, and upper-limb orthotic solutions — from AFOs and KAFOs to spinal bracing — designed to enhance function and prevent deformity.</p>
-            <a href="#" class="btn-link" onclick="showPage('services',null)">Learn More →</a>
+            <a href="javascript:void(0)" class="btn-link" onclick="goToService('section-pediatrics')">Learn More →</a>
           </div>
         </div>
         <div class="service-card">
@@ -955,7 +963,7 @@
           <div class="service-card-body">
             <h3>Pediatric Care</h3>
             <p>Specialized prosthetic and orthotic care for children, supporting growth, development and an active childhood with solutions engineered for young bodies.</p>
-            <a href="#" class="btn-link" onclick="showPage('services',null)">Learn More →</a>
+            <a href="javascript:void(0)" class="btn-link" onclick="goToService('section-prosthetics')">Learn More →</a>
           </div>
         </div>
       </div>
@@ -1132,7 +1140,7 @@
     <div class="container">
 
       <!-- PROSTHETICS -->
-      <div class="service-detail-block">
+      <div class="service-detail-block" id="section-prosthetics">
         <div class="service-detail-grid">
           <div class="service-detail-img">
             <img src="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=800&q=80" alt="Prosthetics">
@@ -1161,7 +1169,7 @@
       <hr class="service-divider">
 
       <!-- ORTHOTICS -->
-      <div class="service-detail-block">
+      <div class="service-detail-block" id="section-orthotics">
         <div class="service-detail-grid reverse">
           <div class="service-detail-img">
             <img src="https://images.unsplash.com/photo-1582719471384-894fbb16e074?w=800&q=80" alt="Orthotics">
@@ -1191,7 +1199,7 @@
       <hr class="service-divider">
 
       <!-- PEDIATRICS -->
-      <div class="service-detail-block">
+      <div class="service-detail-block" id="section-pediatrics">
         <div class="service-detail-grid">
           <div class="service-detail-img">
             <img src="https://images.unsplash.com/photo-1587854692152-cbe660dbde88?w=800&q=80" alt="Pediatric Care">
@@ -1220,7 +1228,7 @@
       <hr class="service-divider">
 
       <!-- DIABETIC & COMPRESSION -->
-      <div class="service-detail-block">
+      <div class="service-detail-block" id="section-diabetic">
         <div class="service-detail-grid reverse">
           <div class="service-detail-img">
             <img src="https://images.unsplash.com/photo-1631217868264-e5b90bb7e133?w=800&q=80" alt="Diabetic Care">
@@ -1409,7 +1417,7 @@
             <div class="contact-icon">✉️</div>
             <div class="contact-detail-text">
               <strong>Email</strong>
-              <span><a href="mailto:ajantapobhopal@gmail.com" style="color:inherit;text-decoration:none;">ajantapobhopal@gmail.com</a></span>
+              <span><a href="/cdn-cgi/l/email-protection#d7b6bdb6b9a3b6a7b8b5bfb8a7b6bb97b0bab6bebbf9b4b8ba" style="color:inherit;text-decoration:none;"><span class="__cf_email__" data-cfemail="b6d7dcd7d8c2d7c6d9d4ded9c6d7daf6d1dbd7dfda98d5d9db">[email&#160;protected]</span></a></span>
             </div>
           </div>
           <div class="contact-detail">
@@ -1553,7 +1561,7 @@
   <div class="container">
     <div class="footer-grid">
       <div class="footer-brand">
-        <a href="javascript:void(0)" onclick="showPage('home',null)" style="display:inline-block;cursor:pointer;" title="Go to Home"><img src="ajanta-logo.png" alt="Ajanta Mobility Solutions"></a>
+        <a href="javascript:void(0)" onclick="showPage('home',null)" style="display:inline-block;cursor:pointer;background:#fff;border-radius:10px;padding:10px 16px;" title="Go to Home"><img src="ajanta-logo.png" alt="Ajanta Mobility Solutions" style="display:block;"></a>
         <p>Restoring mobility, rebuilding lives. Advanced prosthetic and orthotic care with clinical precision and compassion since 1998.</p>
         <div class="footer-brand-social">
           <a href="#" title="Facebook">f</a>
@@ -1584,7 +1592,7 @@
         <h4>Contact</h4>
         <ul>
           <li><a href="tel:+916360893487">+91 63608 93487</a></li>
-          <li><a href="mailto:ajantapobhopal@gmail.com" style="color:inherit;text-decoration:none;">ajantapobhopal@gmail.com</a></li>
+          <li><a href="/cdn-cgi/l/email-protection#b6d7dcd7d8c2d7c6d9d4ded9c6d7daf6d1dbd7dfda98d5d9db" style="color:inherit;text-decoration:none;"><span class="__cf_email__" data-cfemail="bcddd6ddd2c8ddccd3ded4d3ccddd0fcdbd1ddd5d092dfd3d1">[email&#160;protected]</span></a></li>
           <li><a href="javascript:void(0)" onclick="showPage('contact',null)">Book Appointment</a></li>
         </ul>
       </div>
@@ -1604,7 +1612,7 @@
   </svg>
 </a>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // ── EMAILJS INIT ──
 (function() {
   emailjs.init({ publicKey: 'PNhKOCnSXC5I5MkND' });
@@ -1627,6 +1635,30 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 });
+
+// ── SERVICES SCROLL NAVIGATION ──
+function goToService(sectionId) {
+  // First show the services page
+  document.querySelectorAll('.page-section').forEach(function(s) { s.classList.remove('active'); });
+  document.getElementById('services').classList.add('active');
+  // Update active nav link to none (since Services parent isn't clickable)
+  document.querySelectorAll('.nav-links > li > a').forEach(function(a) { a.classList.remove('active'); });
+  // Close mobile menu
+  var navLinks = document.getElementById('navLinks');
+  var hamburger = document.getElementById('hamburger');
+  if (navLinks) navLinks.classList.remove('open');
+  if (hamburger) hamburger.classList.remove('open');
+  // Scroll to section after short delay to allow page render
+  setTimeout(function() {
+    var target = document.getElementById(sectionId);
+    if (target) {
+      var navHeight = document.querySelector('.navbar').offsetHeight + 20;
+      var top = target.getBoundingClientRect().top + window.pageYOffset - navHeight;
+      window.scrollTo({ top: top, behavior: 'smooth' });
+    }
+  }, 80);
+  return false;
+}
 
 // ── PAGE NAVIGATION ──
 function showPage(pageId, clickedLink) {
@@ -1840,6 +1872,64 @@ window.addEventListener('DOMContentLoaded', function() {
 <body>
 
 <script>
+// ── EMAILJS INIT ──
+(function() {
+  if (typeof emailjs !== 'undefined') {
+    emailjs.init({ publicKey: 'PNhKOCnSXC5I5MkND' });
+  }
+})();
+
+// ── DROPDOWN MENU (hover-safe, no gap issue) ──
+var dropdownTimer = null;
+
+function openDropdown() {
+  clearTimeout(dropdownTimer);
+  var dd = document.getElementById('servicesDropdown');
+  if (dd) dd.classList.add('open');
+}
+
+function closeDropdown() {
+  dropdownTimer = setTimeout(function() {
+    var dd = document.getElementById('servicesDropdown');
+    if (dd) dd.classList.remove('open');
+  }, 120);
+}
+
+// ── MOBILE MENU ──
+function toggleMenu() {
+  var nav = document.getElementById('navLinks');
+  var btn = document.getElementById('hamburger');
+  if (nav) nav.classList.toggle('open');
+  if (btn) btn.classList.toggle('open');
+}
+
+// ── SERVICES SCROLL NAVIGATION ──
+function goToService(sectionId) {
+  // Close dropdown immediately
+  var dd = document.getElementById('servicesDropdown');
+  if (dd) dd.classList.remove('open');
+  // Show services page
+  document.querySelectorAll('.page-section').forEach(function(s) { s.classList.remove('active'); });
+  document.getElementById('services').classList.add('active');
+  document.querySelectorAll('.nav-links > li > a').forEach(function(a) { a.classList.remove('active'); });
+  // Close mobile menu
+  var navLinks = document.getElementById('navLinks');
+  var hamburger = document.getElementById('hamburger');
+  if (navLinks) navLinks.classList.remove('open');
+  if (hamburger) hamburger.classList.remove('open');
+  // Scroll to top first, then to section
+  window.scrollTo({ top: 0, behavior: 'instant' });
+  setTimeout(function() {
+    var target = document.getElementById(sectionId);
+    if (target) {
+      var navHeight = (document.querySelector('.navbar') || {offsetHeight:70}).offsetHeight + 24;
+      var top = target.getBoundingClientRect().top + window.pageYOffset - navHeight;
+      window.scrollTo({ top: top, behavior: 'smooth' });
+    }
+  }, 120);
+  return false;
+}
+
 // ── PAGE NAVIGATION ──
 function showPage(pageId, clickedLink) {
   document.querySelectorAll('.page-section').forEach(function(s) { s.classList.remove('active'); });
@@ -1847,6 +1937,12 @@ function showPage(pageId, clickedLink) {
   if (target) target.classList.add('active');
   document.querySelectorAll('.nav-links > li > a').forEach(function(a) { a.classList.remove('active'); });
   if (clickedLink) clickedLink.classList.add('active');
+  var navLinks = document.getElementById('navLinks');
+  var hamburger = document.getElementById('hamburger');
+  if (navLinks) navLinks.classList.remove('open');
+  if (hamburger) hamburger.classList.remove('open');
+  var dd = document.getElementById('servicesDropdown');
+  if (dd) dd.classList.remove('open');
   window.scrollTo({ top: 0, behavior: 'smooth' });
   setTimeout(initReveal, 100);
   return false;
@@ -1860,32 +1956,17 @@ function setSubmitMode(mode) {
   var btnWA = document.getElementById('btnWA');
   var btnEmail = document.getElementById('btnEmail');
   var submitBtn = document.getElementById('submitBtn');
+  if (!btnWA || !btnEmail || !submitBtn) return;
   if (mode === 'whatsapp') {
-    btnWA.style.background = '#25d366';
-    btnWA.style.color = '#fff';
-    btnWA.style.border = '2px solid #25d366';
-    btnWA.style.boxShadow = '0 4px 16px rgba(37,211,102,.4)';
-    btnWA.style.transform = 'translateY(-1px)';
-    btnEmail.style.background = 'transparent';
-    btnEmail.style.color = 'var(--orange)';
-    btnEmail.style.border = '2px solid var(--orange)';
-    btnEmail.style.boxShadow = 'none';
-    btnEmail.style.transform = '';
+    btnWA.style.cssText = 'flex:1;padding:10px;border-radius:50px;border:2px solid #25d366;background:#25d366;color:#fff;font-weight:700;font-size:13.5px;cursor:pointer;box-shadow:0 4px 16px rgba(37,211,102,.4);font-family:DM Sans,sans-serif;';
+    btnEmail.style.cssText = 'flex:1;padding:10px;border-radius:50px;border:2px solid var(--orange);background:transparent;color:var(--orange);font-weight:700;font-size:13.5px;cursor:pointer;font-family:DM Sans,sans-serif;';
     submitBtn.innerHTML = '&#128172; Send via WhatsApp';
     submitBtn.style.background = 'linear-gradient(135deg,#25d366,#128c7e)';
     submitBtn.style.boxShadow = '0 6px 24px rgba(37,211,102,.35)';
   } else {
-    btnEmail.style.background = 'var(--orange)';
-    btnEmail.style.color = '#fff';
-    btnEmail.style.border = '2px solid var(--orange)';
-    btnEmail.style.boxShadow = '0 4px 16px rgba(232,119,34,.4)';
-    btnEmail.style.transform = 'translateY(-1px)';
-    btnWA.style.background = 'transparent';
-    btnWA.style.color = '#25d366';
-    btnWA.style.border = '2px solid #25d366';
-    btnWA.style.boxShadow = 'none';
-    btnWA.style.transform = '';
-    submitBtn.innerHTML = '&#9993;&#65039; Send via Email';
+    btnEmail.style.cssText = 'flex:1;padding:10px;border-radius:50px;border:2px solid var(--orange);background:var(--orange);color:#fff;font-weight:700;font-size:13.5px;cursor:pointer;box-shadow:0 4px 16px rgba(232,119,34,.4);font-family:DM Sans,sans-serif;';
+    btnWA.style.cssText = 'flex:1;padding:10px;border-radius:50px;border:2px solid #25d366;background:transparent;color:#25d366;font-weight:700;font-size:13.5px;cursor:pointer;font-family:DM Sans,sans-serif;';
+    submitBtn.innerHTML = '&#9993; Send via Email';
     submitBtn.style.background = 'linear-gradient(135deg,#e87722,#f5a03a)';
     submitBtn.style.boxShadow = '0 6px 24px rgba(232,119,34,.35)';
   }
@@ -1893,57 +1974,38 @@ function setSubmitMode(mode) {
 
 function clearErr(fieldId) {
   var el = document.getElementById(fieldId);
-  var errKey = fieldId.replace('f_', '');
-  var err = document.getElementById('err_' + errKey);
+  var err = document.getElementById('err_' + fieldId.replace('f_', ''));
   if (el) el.classList.remove('invalid');
   if (err) err.textContent = '';
 }
 
 function setErr(fieldId, message) {
   var el = document.getElementById(fieldId);
-  var errKey = fieldId.replace('f_', '');
-  var err = document.getElementById('err_' + errKey);
+  var err = document.getElementById('err_' + fieldId.replace('f_', ''));
   if (el) el.classList.add('invalid');
   if (err) err.textContent = message;
 }
 
 function validateForm() {
   var valid = true;
-
   var fn = document.getElementById('f_firstname').value.trim();
-  if (!fn) { setErr('f_firstname', 'First name is required.'); valid = false; }
-  else if (fn.length < 2) { setErr('f_firstname', 'Enter a valid first name.'); valid = false; }
-  else clearErr('f_firstname');
-
+  if (!fn || fn.length < 2) { setErr('f_firstname', fn ? 'Enter a valid first name.' : 'First name is required.'); valid = false; } else clearErr('f_firstname');
   var ln = document.getElementById('f_lastname').value.trim();
-  if (!ln) { setErr('f_lastname', 'Last name is required.'); valid = false; }
-  else if (ln.length < 2) { setErr('f_lastname', 'Enter a valid last name.'); valid = false; }
-  else clearErr('f_lastname');
-
+  if (!ln || ln.length < 2) { setErr('f_lastname', ln ? 'Enter a valid last name.' : 'Last name is required.'); valid = false; } else clearErr('f_lastname');
   var ph = document.getElementById('f_phone').value.trim().replace(/\s+/g, '');
-  var phoneRegex = /^[+]?[0-9]{10,13}$/;
   if (!ph) { setErr('f_phone', 'Phone number is required.'); valid = false; }
-  else if (!phoneRegex.test(ph)) { setErr('f_phone', 'Enter a valid 10-digit phone number.'); valid = false; }
+  else if (!/^[+]?[0-9]{10,13}$/.test(ph)) { setErr('f_phone', 'Enter a valid 10-digit phone number.'); valid = false; }
   else clearErr('f_phone');
-
   var em = document.getElementById('f_email').value.trim();
-  var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (em && !emailRegex.test(em)) { setErr('f_email', 'Enter a valid email address.'); valid = false; }
-  else clearErr('f_email');
-
+  if (em && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)) { setErr('f_email', 'Enter a valid email address.'); valid = false; } else clearErr('f_email');
   var sv = document.getElementById('f_service').value;
-  if (!sv) { setErr('f_service', 'Please select a service.'); valid = false; }
-  else clearErr('f_service');
-
+  if (!sv) { setErr('f_service', 'Please select a service.'); valid = false; } else clearErr('f_service');
   var dt = document.getElementById('f_date').value;
   if (!dt) { setErr('f_date', 'Please select a preferred date.'); valid = false; }
   else {
-    var selected = new Date(dt + 'T00:00:00');
-    var today = new Date(); today.setHours(0,0,0,0);
-    if (selected < today) { setErr('f_date', 'Please select a future date.'); valid = false; }
-    else clearErr('f_date');
+    var sel = new Date(dt + 'T00:00:00'); var today = new Date(); today.setHours(0,0,0,0);
+    if (sel < today) { setErr('f_date', 'Please select a future date.'); valid = false; } else clearErr('f_date');
   }
-
   return valid;
 }
 
@@ -1953,7 +2015,6 @@ function submitAppointment() {
     if (firstErr) firstErr.scrollIntoView({ behavior: 'smooth', block: 'center' });
     return;
   }
-
   var fn  = document.getElementById('f_firstname').value.trim();
   var ln  = document.getElementById('f_lastname').value.trim();
   var ph  = document.getElementById('f_phone').value.trim();
@@ -1962,71 +2023,61 @@ function submitAppointment() {
   var dt  = document.getElementById('f_date').value;
   var tm  = document.getElementById('f_time').value;
   var msg = document.getElementById('f_message').value.trim();
-
-  var dateObj = new Date(dt + 'T00:00:00');
-  var dateStr = dateObj.toLocaleDateString('en-IN', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
-
-  if (currentMode === 'whatsapp') {
-    var lines = [];
-    lines.push('Hello Ajanta Mobility Solutions!');
-    lines.push('');
-    lines.push('I would like to book an appointment.');
-    lines.push('');
-    lines.push('*Patient Details:*');
-    lines.push('Name: ' + fn + ' ' + ln);
-    lines.push('Phone: ' + ph);
-    if (em) lines.push('Email: ' + em);
-    lines.push('');
-    lines.push('*Appointment Details:*');
-    lines.push('Service: ' + sv);
-    lines.push('Preferred Date: ' + dateStr);
-    if (tm) lines.push('Preferred Time: ' + tm);
-    if (msg) { lines.push(''); lines.push('Additional Details: ' + msg); }
-    lines.push('');
-    lines.push('Please confirm my appointment. Thank you!');
-    var waText = lines.join('%0A');
-    window.open('https://wa.me/916360893487?text=' + waText, '_blank');
-  } else {
-    var subjectStr = 'Appointment Request - ' + fn + ' ' + ln + ' - ' + sv;
-    var bodyLines = [];
-    bodyLines.push('Hello Ajanta Mobility Solutions,');
-    bodyLines.push('');
-    bodyLines.push('I would like to book an appointment.');
-    bodyLines.push('');
-    bodyLines.push('Patient Details:');
-    bodyLines.push('Name: ' + fn + ' ' + ln);
-    bodyLines.push('Phone: ' + ph);
-    if (em) bodyLines.push('Email: ' + em);
-    bodyLines.push('');
-    bodyLines.push('Appointment Details:');
-    bodyLines.push('Service: ' + sv);
-    bodyLines.push('Preferred Date: ' + dateStr);
-    if (tm) bodyLines.push('Preferred Time: ' + tm);
-    if (msg) { bodyLines.push(''); bodyLines.push('Additional Details:'); bodyLines.push(msg); }
-    bodyLines.push('');
-    bodyLines.push('Please confirm my appointment. Thank you!');
-    var bodyStr = bodyLines.join('\n');
-    window.location.href = 'mailto:ajantapobhopal@gmail.com?subject=' + encodeURIComponent(subjectStr) + '&body=' + encodeURIComponent(bodyStr);
-  }
-
-  document.getElementById('successMsg').style.display = 'block';
-  setTimeout(function() { document.getElementById('successMsg').style.display = 'none'; }, 7000);
-
+  var dateStr = new Date(dt + 'T00:00:00').toLocaleDateString('en-IN', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+  var submitBtn = document.getElementById('submitBtn');
+  submitBtn.disabled = true;
+  submitBtn.innerHTML = '&#9203; Sending...';
+  if (typeof emailjs !== 'undefined') {
+    emailjs.send('service_nv2dpxm', 'template_4d95ujp', {
+      patient_name: fn + ' ' + ln,
+      phone: ph,
+      patient_email: em || 'Not provided',
+      service: sv,
+      date: dateStr,
+      time: tm || 'Not specified',
+      message: msg || 'No additional message'
+    }).then(function() { showSuccess(); }, function(err) { console.error('EmailJS:', err); showSuccess(); });
+  } else { showSuccess(); }
   setTimeout(function() {
-    ['f_firstname','f_lastname','f_phone','f_email','f_message'].forEach(function(id) {
-      document.getElementById(id).value = '';
-    });
-    document.getElementById('f_service').selectedIndex = 0;
-    document.getElementById('f_time').selectedIndex = 0;
-    document.getElementById('f_date').value = '';
-  }, 1500);
+    if (currentMode === 'whatsapp') {
+      var lines = ['Hello Ajanta Mobility Solutions!','','I would like to book an appointment.','','*Patient Details:*','Name: '+fn+' '+ln,'Phone: '+ph];
+      if (em) lines.push('Email: '+em);
+      lines.push('','*Appointment Details:*','Service: '+sv,'Preferred Date: '+dateStr);
+      if (tm) lines.push('Preferred Time: '+tm);
+      if (msg) { lines.push(''); lines.push('Additional Details: '+msg); }
+      lines.push('','Please confirm my appointment. Thank you!');
+      window.open('https://wa.me/916360893487?text='+lines.join('%0A'), '_blank');
+    } else {
+      var subj = 'Appointment Request - '+fn+' '+ln+' - '+sv;
+      var body = ['Hello Ajanta Mobility Solutions,','','Patient Details:','Name: '+fn+' '+ln,'Phone: '+ph];
+      if (em) body.push('Email: '+em);
+      body.push('','Appointment Details:','Service: '+sv,'Preferred Date: '+dateStr);
+      if (tm) body.push('Preferred Time: '+tm);
+      if (msg) { body.push(''); body.push('Additional Details: '+msg); }
+      body.push('','Thank you!');
+      window.location.href = 'mailto:ajantapobhopal@gmail.com?subject='+encodeURIComponent(subj)+'&body='+encodeURIComponent(body.join('\n'));
+    }
+  }, 400);
+}
+
+function showSuccess() {
+  var submitBtn = document.getElementById('submitBtn');
+  var successMsg = document.getElementById('successMsg');
+  if (submitBtn) { submitBtn.disabled = false; setSubmitMode(currentMode); }
+  if (successMsg) { successMsg.style.display = 'block'; setTimeout(function() { successMsg.style.display = 'none'; }, 7000); }
+  setTimeout(function() {
+    ['f_firstname','f_lastname','f_phone','f_email','f_message'].forEach(function(id) { var el=document.getElementById(id); if(el) el.value=''; });
+    var s=document.getElementById('f_service'); if(s) s.selectedIndex=0;
+    var t=document.getElementById('f_time'); if(t) t.selectedIndex=0;
+    var d=document.getElementById('f_date'); if(d) d.value='';
+  }, 1200);
 }
 
 function submitForm() { submitAppointment(); }
 
 // ── SCROLL REVEAL ──
 function initReveal() {
-  var els = document.querySelectorAll('.page-section.active .service-card, .page-section.active .why-card, .page-section.active .testi-card, .page-section.active .step-item, .page-section.active .value-item, .page-section.active .contact-detail');
+  var els = document.querySelectorAll('.page-section.active .service-card,.page-section.active .why-card,.page-section.active .testi-card,.page-section.active .step-item,.page-section.active .value-item,.page-section.active .contact-detail');
   els.forEach(function(el, i) {
     el.classList.add('reveal');
     setTimeout(function() {
@@ -2041,8 +2092,8 @@ function initReveal() {
 // ── NAVBAR SCROLL ──
 window.addEventListener('scroll', function() {
   var nav = document.querySelector('.navbar');
-  if (window.scrollY > 40) nav.classList.add('scrolled');
-  else nav.classList.remove('scrolled');
+  if (!nav) return;
+  if (window.scrollY > 40) nav.classList.add('scrolled'); else nav.classList.remove('scrolled');
 });
 
 // ── COUNTER ANIMATION ──
@@ -2052,10 +2103,9 @@ function animateCounters() {
     var suffix = el.textContent.replace(/[0-9]/g, '');
     if (isNaN(target)) return;
     var startTime = null;
-    var duration = 1800;
     function step(timestamp) {
       if (!startTime) startTime = timestamp;
-      var progress = Math.min((timestamp - startTime) / duration, 1);
+      var progress = Math.min((timestamp - startTime) / 1800, 1);
       var eased = 1 - Math.pow(1 - progress, 3);
       el.textContent = Math.floor(eased * target) + suffix;
       if (progress < 1) requestAnimationFrame(step);
@@ -2065,6 +2115,24 @@ function animateCounters() {
 }
 
 // ── INIT ──
+window.addEventListener('DOMContentLoaded', function() {
+  // Close dropdown when clicking outside
+  document.addEventListener('click', function(e) {
+    var menu = document.getElementById('servicesMenu');
+    var dd = document.getElementById('servicesDropdown');
+    if (dd && menu && !menu.contains(e.target)) {
+      dd.classList.remove('open');
+    }
+  });
+  // Close mobile menu on nav link click
+  document.querySelectorAll('#navLinks a').forEach(function(a) {
+    a.addEventListener('click', function() {
+      var n = document.getElementById('navLinks');
+      var h = document.getElementById('hamburger');
+      if (n) n.classList.remove('open');
+      if (h) h.classList.remove('open');
+    });
+  });
   var dateInput = document.getElementById('f_date');
   if (dateInput) dateInput.setAttribute('min', new Date().toISOString().split('T')[0]);
   setSubmitMode('whatsapp');
