@@ -1,0 +1,2150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ajanta Mobility Solutions – Motion Restored, Lives Rebuilt</title>
+<link rel="icon" type="image/png" href="ajanta-logo.png">
+  <link rel="apple-touch-icon" href="ajanta-logo.png">
+  <meta name="theme-color" content="#1565c0">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600;700&display=swap');
+
+  :root {
+    --navy: #1565c0;
+    --navy-dark: #0d47a1;
+    --navy-deeper: #082666;
+    --orange: #e87722;
+    --orange-light: #f5a03a;
+    --orange-glow: rgba(232,119,34,.25);
+    --blue-glow: rgba(21,101,192,.2);
+    --gray-bg: #f0f4fb;
+    --white: #ffffff;
+    --text: #1a2540;
+    --text-light: #5a6a82;
+    --border: #dde5f5;
+    --glass: rgba(255,255,255,0.07);
+    --glass-border: rgba(255,255,255,0.15);
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; scroll-behavior:smooth; }
+
+  body {
+    font-family:'DM Sans', sans-serif;
+    color:var(--text); background:var(--white);
+    overflow-x:hidden;
+  }
+
+  /* ── CUSTOM SCROLLBAR ── */
+  ::-webkit-scrollbar { width:6px; }
+  ::-webkit-scrollbar-track { background:#f0f4fb; }
+  ::-webkit-scrollbar-thumb { background:var(--navy); border-radius:3px; }
+  ::-webkit-scrollbar-thumb:hover { background:var(--orange); }
+
+  /* ── TOP BAR ── */
+  .topbar {
+    background:var(--navy-deeper);
+    color:#9ab0d4; padding:8px 0; font-size:13px;
+    border-bottom:1px solid rgba(255,255,255,.06);
+  }
+  .topbar .container { display:flex; justify-content:space-between; align-items:center; }
+  .topbar a { color:#9ab0d4; text-decoration:none; transition:color .2s; }
+  .topbar a:hover { color:var(--orange); }
+  .topbar-contact { display:flex; gap:28px; }
+  .topbar-social { display:flex; gap:10px; }
+  .topbar-social a {
+    width:28px; height:28px; border-radius:50%;
+    background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.1);
+    display:flex; align-items:center; justify-content:center; font-size:12px;
+    transition:all .25s;
+  }
+  .topbar-social a:hover { background:var(--orange); border-color:var(--orange); transform:translateY(-1px); }
+
+  /* ── NAVBAR ── */
+  .navbar {
+    background:rgba(255,255,255,0.95);
+    backdrop-filter:blur(20px);
+    -webkit-backdrop-filter:blur(20px);
+    box-shadow:0 1px 0 rgba(21,101,192,.08), 0 4px 24px rgba(21,101,192,.06);
+    position:sticky; top:0; z-index:1000;
+    transition:box-shadow .3s;
+  }
+  .navbar.scrolled {
+    box-shadow:0 2px 32px rgba(21,101,192,.15);
+  }
+  .nav-inner { display:flex; align-items:center; justify-content:space-between; padding:8px 0; }
+  .logo img { height:64px; object-fit:contain; filter:drop-shadow(0 2px 6px rgba(21,101,192,.15)); }
+  .nav-links { display:flex; list-style:none; align-items:center; }
+  .nav-links > li { position:relative; }
+  .nav-links > li > a {
+    display:block; padding:14px 17px;
+    color:var(--navy); font-weight:500; font-size:14.5px;
+    text-decoration:none; transition:color .2s; letter-spacing:.1px;
+    position:relative;
+  }
+  .nav-links > li > a:hover { color:var(--orange); }
+  .nav-links > li > a[style*="cursor:default"]:hover { color:var(--navy); }
+  .nav-links > li > a[style*="cursor:default"]::after { display:none !important; }
+  .nav-links > li > a.active { color:var(--orange); }
+  .nav-links > li > a::after {
+    content:''; position:absolute; bottom:8px; left:17px; right:17px;
+    height:2px; background:linear-gradient(90deg, var(--orange), var(--orange-light));
+    border-radius:1px; width:0; transition:width .3s cubic-bezier(.4,0,.2,1);
+    transform-origin:left;
+  }
+  .nav-links > li > a:hover::after,
+  .nav-links > li > a.active::after { width:calc(100% - 34px); }
+  .dropdown {
+    display:block; position:absolute; top:100%; left:0;
+    background:rgba(255,255,255,0.98);
+    backdrop-filter:blur(20px);
+    box-shadow:0 20px 60px rgba(21,101,192,.15), 0 0 0 1px rgba(21,101,192,.06);
+    min-width:230px; border-radius:0 0 12px 12px; overflow:hidden; z-index:999;
+    transform:translateY(-8px); opacity:0; pointer-events:none;
+    transition:opacity .2s ease, transform .2s ease;
+    visibility:hidden;
+  }
+  /* dropdown shown via JS .open class */
+  .nav-links > li .dropdown.open {
+    transform:translateY(0); opacity:1; pointer-events:all; visibility:visible;
+  }
+  .dropdown a {
+    display:flex; align-items:center; gap:10px;
+    padding:12px 20px; color:var(--text); text-decoration:none; font-size:14px;
+    border-bottom:1px solid rgba(21,101,192,.06); transition:all .15s;
+  }
+  .dropdown a::before { content:'→'; color:var(--orange); opacity:0; transition:opacity .15s, transform .15s; transform:translateX(-4px); }
+  .dropdown a:hover { background:var(--gray-bg); color:var(--navy); padding-left:24px; }
+  .dropdown a:hover::before { opacity:1; transform:translateX(0); }
+  .nav-cta {
+    background:linear-gradient(135deg, var(--orange), var(--orange-light)) !important;
+    color:#fff !important; padding:11px 24px !important;
+    border-radius:50px !important; margin-left:12px;
+    box-shadow:0 4px 16px var(--orange-glow);
+    font-weight:600 !important;
+    transition:all .25s !important;
+  }
+  .nav-cta:hover {
+    transform:translateY(-2px) !important;
+    box-shadow:0 8px 28px var(--orange-glow) !important;
+  }
+  .nav-cta::after { display:none !important; }
+  .container { max-width:1160px; margin:0 auto; padding:0 24px; }
+
+  /* ── PAGE SECTIONS ── */
+  .page-section { display:none; }
+  .page-section.active { display:block; animation:pageFadeIn .4s ease; }
+  @keyframes pageFadeIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+
+  /* ── HERO ── */
+  .hero {
+    background:linear-gradient(125deg, var(--navy-deeper) 0%, var(--navy-dark) 40%, #1a56a0 70%, #1e6bb5 100%);
+    min-height:620px; display:flex; align-items:center;
+    position:relative; overflow:hidden;
+  }
+  .hero::before {
+    content:'';
+    position:absolute; inset:0;
+    background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.025'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+  .hero-orb-1 {
+    position:absolute; width:700px; height:700px; border-radius:50%;
+    background:radial-gradient(circle, rgba(232,119,34,.18) 0%, transparent 65%);
+    right:-200px; top:-200px; pointer-events:none;
+    animation:orbFloat 8s ease-in-out infinite;
+  }
+  .hero-orb-2 {
+    position:absolute; width:400px; height:400px; border-radius:50%;
+    background:radial-gradient(circle, rgba(255,255,255,.06) 0%, transparent 70%);
+    left:-100px; bottom:-100px; pointer-events:none;
+    animation:orbFloat 11s ease-in-out infinite reverse;
+  }
+  @keyframes orbFloat {
+    0%,100% { transform:translate(0,0) scale(1); }
+    33% { transform:translate(20px,-20px) scale(1.03); }
+    66% { transform:translate(-15px,15px) scale(.97); }
+  }
+  .hero-accent {
+    position:absolute; right:0; top:0; width:44%; height:100%;
+    background:url('https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800&q=80') center/cover;
+    opacity:.12; clip-path:polygon(14% 0%, 100% 0%, 100% 100%, 0% 100%);
+  }
+  .hero-accent-line {
+    position:absolute; right:44%; top:0; bottom:0; width:2px;
+    background:linear-gradient(180deg, transparent, rgba(232,119,34,.6), transparent);
+  }
+  .hero-content { position:relative; z-index:2; max-width:640px; padding:70px 0; }
+  .hero-badge {
+    display:inline-flex; align-items:center; gap:8px;
+    background:rgba(232,119,34,.15); color:var(--orange-light);
+    border:1px solid rgba(232,119,34,.3);
+    font-size:11.5px; font-weight:600; letter-spacing:2.5px;
+    padding:6px 16px; border-radius:50px; margin-bottom:22px;
+    text-transform:uppercase; backdrop-filter:blur(10px);
+  }
+  .hero-badge::before { content:''; width:6px; height:6px; border-radius:50%; background:var(--orange); animation:pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.6;transform:scale(1.3)} }
+  .hero h1 {
+    font-family:'Cormorant Garamond', serif;
+    font-size:62px; line-height:1.1; color:#fff; font-weight:700;
+    margin-bottom:20px; letter-spacing:-1px;
+  }
+  .hero h1 span {
+    color:transparent;
+    background:linear-gradient(135deg, var(--orange), var(--orange-light));
+    -webkit-background-clip:text; background-clip:text;
+  }
+  .hero-sub {
+    color:rgba(200,220,255,.8); font-size:17px; line-height:1.75;
+    margin-bottom:36px; font-weight:300; max-width:520px;
+  }
+  .hero-btns { display:flex; gap:14px; flex-wrap:wrap; }
+  .btn {
+    display:inline-flex; align-items:center; gap:8px;
+    padding:14px 32px; border-radius:50px;
+    font-weight:600; font-size:14.5px; text-decoration:none;
+    transition:all .25s cubic-bezier(.4,0,.2,1); cursor:pointer; border:none;
+    font-family:'DM Sans',sans-serif;
+  }
+  .btn-primary {
+    background:linear-gradient(135deg, var(--orange), var(--orange-light));
+    color:#fff; box-shadow:0 6px 24px var(--orange-glow);
+  }
+  .btn-primary:hover { transform:translateY(-3px); box-shadow:0 12px 36px var(--orange-glow); filter:brightness(1.05); }
+  .btn-outline {
+    background:var(--glass); border:1px solid var(--glass-border);
+    color:#fff; backdrop-filter:blur(10px);
+  }
+  .btn-outline:hover { background:rgba(255,255,255,.15); transform:translateY(-2px); border-color:rgba(255,255,255,.35); }
+  .hero-stats {
+    display:flex; gap:48px; margin-top:52px;
+    padding-top:36px; border-top:1px solid rgba(255,255,255,.1);
+  }
+  .stat-item { text-align:left; }
+  .stat-num {
+    font-family:'Cormorant Garamond', serif; font-size:42px; font-weight:700;
+    background:linear-gradient(135deg, var(--orange), var(--orange-light));
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    line-height:1;
+  }
+  .stat-label { color:rgba(180,200,230,.7); font-size:12.5px; font-weight:500; letter-spacing:.5px; margin-top:4px; }
+
+  /* ── SECTION HEADERS ── */
+  .section-header { text-align:center; margin-bottom:56px; }
+  .section-tag {
+    display:inline-block; color:var(--orange); font-weight:600;
+    font-size:11.5px; letter-spacing:3px; text-transform:uppercase;
+    margin-bottom:12px; position:relative; padding:0 16px;
+  }
+  .section-tag::before, .section-tag::after {
+    content:''; position:absolute; top:50%; width:30px; height:1px;
+    background:var(--orange); opacity:.5;
+  }
+  .section-tag::before { right:100%; margin-right:-14px; }
+  .section-tag::after { left:100%; margin-left:-14px; }
+  .section-header h2 {
+    font-family:'Cormorant Garamond', serif;
+    font-size:44px; font-weight:700; color:var(--navy);
+    margin-bottom:14px; letter-spacing:-.5px;
+  }
+  .section-header p { color:var(--text-light); font-size:17px; max-width:600px; margin:0 auto; line-height:1.75; }
+  .divider {
+    width:60px; height:3px; margin:16px auto 0; border-radius:2px;
+    background:linear-gradient(90deg, var(--orange), var(--orange-light));
+  }
+
+  /* ── WELCOME ── */
+  .welcome-section { padding:100px 0; background:var(--white); }
+  .welcome-grid { display:grid; grid-template-columns:1fr 1fr; gap:72px; align-items:center; }
+  .welcome-img-wrap { position:relative; }
+  .welcome-img-wrap::before {
+    content:''; position:absolute; inset:-12px -12px 12px 12px;
+    background:linear-gradient(135deg, var(--navy), var(--orange));
+    border-radius:16px; opacity:.12; z-index:0;
+  }
+  .welcome-img-wrap img {
+    width:100%; border-radius:12px; position:relative; z-index:1;
+    box-shadow:0 32px 80px rgba(21,101,192,.2);
+  }
+  .welcome-badge-float {
+    position:absolute; bottom:-28px; right:-28px; z-index:2;
+    background:linear-gradient(135deg, var(--orange), var(--orange-light));
+    color:#fff; border-radius:12px; padding:22px 28px;
+    text-align:center; box-shadow:0 16px 48px var(--orange-glow);
+  }
+  .welcome-badge-float strong { font-size:38px; font-family:'Cormorant Garamond',serif; display:block; line-height:1; }
+  .welcome-badge-float span { font-size:12.5px; font-weight:500; opacity:.9; letter-spacing:.5px; }
+  .welcome-text h2 {
+    font-family:'Cormorant Garamond', serif; font-size:42px; color:var(--navy);
+    margin-bottom:20px; line-height:1.2; letter-spacing:-.3px;
+  }
+  .welcome-text p { color:var(--text-light); line-height:1.85; font-size:16px; margin-bottom:16px; }
+  .check-list { list-style:none; margin:24px 0; }
+  .check-list li {
+    padding:10px 0 10px 34px; position:relative; color:var(--text);
+    font-size:15px; border-bottom:1px solid var(--border);
+    transition:padding-left .2s;
+  }
+  .check-list li:last-child { border:none; }
+  .check-list li::before {
+    content:''; position:absolute; left:0; top:50%; transform:translateY(-50%);
+    width:20px; height:20px; border-radius:50%;
+    background:linear-gradient(135deg, var(--orange), var(--orange-light));
+    display:flex; align-items:center; justify-content:center;
+  }
+  .check-list li::after {
+    content:'✓'; position:absolute; left:4px; top:50%; transform:translateY(-50%);
+    color:#fff; font-size:11px; font-weight:700;
+  }
+  .check-list li:hover { padding-left:38px; }
+
+  /* ── SERVICES ── */
+  .services-section { padding:100px 0; background:var(--gray-bg); position:relative; overflow:hidden; }
+  .services-section::before {
+    content:''; position:absolute; top:-80px; right:-80px;
+    width:400px; height:400px; border-radius:50%;
+    background:radial-gradient(circle, rgba(21,101,192,.06), transparent 70%);
+    pointer-events:none;
+  }
+  .services-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:28px; }
+  .service-card {
+    background:var(--white); border-radius:16px; overflow:hidden;
+    box-shadow:0 4px 24px rgba(21,101,192,.07);
+    transition:all .35s cubic-bezier(.4,0,.2,1);
+    border:1px solid rgba(21,101,192,.06);
+  }
+  .service-card:hover {
+    transform:translateY(-10px);
+    box-shadow:0 24px 64px rgba(21,101,192,.15);
+    border-color:rgba(232,119,34,.2);
+  }
+  .service-card-img { height:210px; overflow:hidden; position:relative; }
+  .service-card-img img { width:100%; height:100%; object-fit:cover; transition:transform .5s ease; }
+  .service-card:hover .service-card-img img { transform:scale(1.08); }
+  .service-card-img::after {
+    content:''; position:absolute; inset:0;
+    background:linear-gradient(0deg, rgba(8,38,102,.5) 0%, transparent 60%);
+  }
+  .service-card-tag {
+    position:absolute; top:14px; left:14px; z-index:1;
+    background:linear-gradient(135deg, var(--orange), var(--orange-light));
+    color:#fff; padding:5px 14px;
+    font-size:11px; font-weight:700; letter-spacing:1.5px;
+    border-radius:50px; text-transform:uppercase;
+    box-shadow:0 4px 12px var(--orange-glow);
+  }
+  .service-card-body { padding:28px; }
+  .service-card-body h3 {
+    font-family:'Cormorant Garamond',serif; font-size:24px;
+    color:var(--navy); margin-bottom:10px; font-weight:700;
+  }
+  .service-card-body p { color:var(--text-light); font-size:15px; line-height:1.75; margin-bottom:20px; }
+  .btn-link {
+    color:var(--orange); font-weight:600; text-decoration:none;
+    font-size:14px; display:inline-flex; align-items:center; gap:6px;
+    transition:gap .2s;
+  }
+  .btn-link:hover { gap:12px; }
+
+  /* ── JOURNEY ── */
+  .journey-section { padding:100px 0; background:var(--white); }
+  .journey-steps { display:grid; grid-template-columns:repeat(5,1fr); gap:0; position:relative; margin-top:64px; }
+  .journey-steps::before {
+    content:''; position:absolute; top:35px; left:10%; right:10%; height:3px;
+    background:linear-gradient(90deg, var(--navy), var(--orange), var(--orange-light));
+    border-radius:2px; z-index:0;
+  }
+  .step-item { text-align:center; padding:0 12px; position:relative; z-index:1; }
+  .step-num {
+    width:72px; height:72px; border-radius:50%;
+    background:linear-gradient(135deg, var(--navy-dark), var(--navy));
+    color:#fff; display:flex; align-items:center; justify-content:center;
+    font-family:'Cormorant Garamond',serif; font-size:28px; font-weight:700;
+    margin:0 auto 20px;
+    border:4px solid var(--white);
+    box-shadow:0 6px 24px rgba(21,101,192,.3);
+    transition:all .3s;
+  }
+  .step-item:hover .step-num {
+    background:linear-gradient(135deg, var(--orange), var(--orange-light));
+    box-shadow:0 8px 28px var(--orange-glow); transform:scale(1.1);
+  }
+  .step-icon { font-size:26px; margin-bottom:8px; }
+  .step-item h4 { font-family:'Cormorant Garamond',serif; font-size:16px; font-weight:700; color:var(--navy); margin-bottom:8px; }
+  .step-item p { font-size:13px; color:var(--text-light); line-height:1.6; }
+
+  /* ── WHY US ── */
+  .why-section {
+    padding:100px 0;
+    background:linear-gradient(135deg, var(--navy-deeper) 0%, var(--navy-dark) 50%, #1a4fa0 100%);
+    position:relative; overflow:hidden;
+  }
+  .why-section::before {
+    content:''; position:absolute; inset:0;
+    background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.02'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+  .why-section .section-header h2 { color:#fff; }
+  .why-section .section-header p { color:rgba(180,200,235,.75); }
+  .why-section .section-tag { color:var(--orange-light); }
+  .why-section .divider { background:linear-gradient(90deg, var(--orange), var(--orange-light)); }
+  .why-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; }
+  .why-card {
+    background:rgba(255,255,255,.05);
+    border:1px solid rgba(255,255,255,.1);
+    border-radius:16px; padding:36px 30px;
+    transition:all .35s cubic-bezier(.4,0,.2,1);
+    backdrop-filter:blur(10px);
+    position:relative; overflow:hidden;
+  }
+  .why-card::before {
+    content:''; position:absolute; inset:0; border-radius:16px;
+    background:linear-gradient(135deg, rgba(232,119,34,.08), transparent);
+    opacity:0; transition:opacity .35s;
+  }
+  .why-card:hover { background:rgba(255,255,255,.09); transform:translateY(-6px); border-color:rgba(232,119,34,.3); }
+  .why-card:hover::before { opacity:1; }
+  .why-card-icon {
+    width:60px; height:60px;
+    background:linear-gradient(135deg, var(--orange), var(--orange-light));
+    border-radius:14px; display:flex; align-items:center; justify-content:center;
+    font-size:28px; margin-bottom:22px;
+    box-shadow:0 8px 24px var(--orange-glow);
+    transition:transform .3s;
+  }
+  .why-card:hover .why-card-icon { transform:scale(1.1) rotate(3deg); }
+  .why-card h3 { color:#fff; font-size:19px; font-family:'Cormorant Garamond',serif; font-weight:700; margin-bottom:12px; }
+  .why-card p { color:rgba(180,200,235,.75); font-size:15px; line-height:1.75; }
+
+  /* ── TESTIMONIALS ── */
+  .testimonials-section { padding:100px 0; background:var(--gray-bg); position:relative; }
+  .testi-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:28px; }
+  .testi-card {
+    background:var(--white); border-radius:16px; padding:36px 30px;
+    box-shadow:0 4px 24px rgba(21,101,192,.08);
+    border:1px solid rgba(21,101,192,.06);
+    position:relative; overflow:hidden;
+    transition:all .3s cubic-bezier(.4,0,.2,1);
+  }
+  .testi-card::before {
+    content:''; position:absolute; top:0; left:0; right:0; height:4px;
+    background:linear-gradient(90deg, var(--orange), var(--orange-light));
+    border-radius:16px 16px 0 0;
+  }
+  .testi-card::after {
+    content:'"'; font-family:'Cormorant Garamond',serif; font-size:100px;
+    color:var(--orange); opacity:.08; position:absolute; top:8px; left:18px;
+    line-height:1; pointer-events:none;
+  }
+  .testi-card:hover { transform:translateY(-6px); box-shadow:0 20px 56px rgba(21,101,192,.13); }
+  .testi-stars { color:var(--orange); font-size:15px; margin-bottom:16px; letter-spacing:2px; }
+  .testi-text { color:var(--text-light); font-size:15.5px; line-height:1.85; margin-bottom:24px; font-style:italic; }
+  .testi-author { display:flex; align-items:center; gap:14px; }
+  .testi-avatar {
+    width:50px; height:50px; border-radius:50%;
+    background:linear-gradient(135deg, var(--navy-dark), var(--navy));
+    display:flex; align-items:center; justify-content:center;
+    color:#fff; font-weight:700; font-size:20px;
+    font-family:'Cormorant Garamond',serif;
+    box-shadow:0 4px 16px var(--blue-glow);
+    flex-shrink:0;
+  }
+  .testi-name { font-weight:600; color:var(--navy); font-size:15px; }
+  .testi-role { color:var(--text-light); font-size:13px; margin-top:2px; }
+
+  /* ── ABOUT HERO ── */
+  .about-hero, .services-hero, .contact-hero {
+    background:linear-gradient(125deg, var(--navy-deeper) 0%, var(--navy-dark) 50%, #1a56a0 100%);
+    padding:80px 0; text-align:center; position:relative; overflow:hidden;
+  }
+  .about-hero::before, .services-hero::before, .contact-hero::before {
+    content:''; position:absolute; inset:0;
+    background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none'%3E%3Cg fill='%23ffffff' fill-opacity='0.025'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+  .about-hero h1, .services-hero h1, .contact-hero h1 {
+    font-family:'Cormorant Garamond',serif; font-size:52px; color:#fff;
+    margin-bottom:14px; font-weight:700; letter-spacing:-.5px; position:relative;
+  }
+  .about-hero p, .services-hero p, .contact-hero p {
+    color:rgba(190,210,240,.8); font-size:18px; max-width:560px;
+    margin:0 auto; line-height:1.75; position:relative;
+  }
+
+  /* ── ABOUT CONTENT ── */
+  .about-content { padding:100px 0; }
+  .about-grid { display:grid; grid-template-columns:1fr 1fr; gap:72px; align-items:start; margin-bottom:72px; }
+  .about-text h2 { font-family:'Cormorant Garamond',serif; font-size:40px; color:var(--navy); margin-bottom:18px; letter-spacing:-.3px; }
+  .about-text p { color:var(--text-light); line-height:1.85; font-size:16px; margin-bottom:16px; }
+  .values-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:20px; margin-top:28px; }
+  .value-item {
+    padding:22px; background:var(--gray-bg);
+    border-radius:12px; border-left:4px solid var(--orange);
+    transition:transform .25s, box-shadow .25s;
+  }
+  .value-item:hover { transform:translateY(-3px); box-shadow:0 8px 24px rgba(21,101,192,.1); }
+  .value-item h4 { color:var(--navy); font-size:15px; font-weight:700; margin-bottom:6px; }
+  .value-item p { color:var(--text-light); font-size:14px; line-height:1.65; }
+  .vision-box {
+    background:linear-gradient(135deg, var(--navy-deeper), var(--navy-dark));
+    color:#fff; border-radius:16px; padding:48px;
+    margin-bottom:56px; position:relative; overflow:hidden;
+    box-shadow:0 20px 60px rgba(8,38,102,.3);
+  }
+  .vision-box::before {
+    content:''; position:absolute; top:-60px; right:-60px;
+    width:300px; height:300px; border-radius:50%;
+    background:radial-gradient(circle, rgba(232,119,34,.15), transparent 70%);
+  }
+  .vision-box h3 { font-family:'Cormorant Garamond',serif; font-size:32px; margin-bottom:18px; color:var(--orange-light); letter-spacing:-.3px; }
+  .vision-list { list-style:none; display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:18px; }
+  .vision-list li { color:rgba(190,210,240,.85); font-size:15px; padding-left:22px; position:relative; }
+  .vision-list li::before { content:'→'; position:absolute; left:0; color:var(--orange); }
+
+  /* ── SERVICES DETAIL ── */
+  .services-detail-section { padding:100px 0; }
+  .service-detail-block { margin-bottom:80px; }
+  .service-detail-grid { display:grid; grid-template-columns:1fr 1fr; gap:64px; align-items:center; }
+  .service-detail-grid.reverse { direction:rtl; }
+  .service-detail-grid.reverse > * { direction:ltr; }
+  .service-detail-img { border-radius:16px; overflow:hidden; box-shadow:0 20px 60px rgba(21,101,192,.18); }
+  .service-detail-img img { width:100%; height:360px; object-fit:cover; transition:transform .5s; }
+  .service-detail-img:hover img { transform:scale(1.04); }
+  .service-detail-text h2 { font-family:'Cormorant Garamond',serif; font-size:38px; color:var(--navy); margin-bottom:16px; letter-spacing:-.3px; }
+  .service-detail-text p { color:var(--text-light); line-height:1.85; font-size:16px; margin-bottom:16px; }
+  .service-tags { display:flex; flex-wrap:wrap; gap:8px; margin-top:20px; }
+  .service-tag {
+    background:var(--gray-bg); color:var(--navy);
+    padding:7px 16px; border-radius:50px; font-size:13px; font-weight:600;
+    border:1px solid var(--border); transition:all .2s;
+  }
+  .service-tag:hover { background:var(--orange); color:#fff; border-color:var(--orange); }
+  .conditions-box {
+    background:linear-gradient(135deg, var(--navy-dark), var(--navy));
+    color:#fff; border-radius:12px; padding:24px 28px; margin-top:22px;
+    box-shadow:0 8px 32px var(--blue-glow);
+  }
+  .conditions-box h4 { color:var(--orange-light); margin-bottom:12px; font-size:12px; letter-spacing:2px; text-transform:uppercase; font-weight:600; }
+  .conditions-list { display:flex; flex-wrap:wrap; gap:8px; }
+  .cond-pill { background:rgba(255,255,255,.1); color:rgba(210,225,255,.9); padding:5px 14px; border-radius:50px; font-size:13px; border:1px solid rgba(255,255,255,.1); }
+  .service-divider { border:none; border-top:1px solid var(--border); margin:64px 0; }
+
+  /* ── CONTACT ── */
+  .contact-section { padding:100px 0; }
+  .contact-grid { display:grid; grid-template-columns:1fr 1.4fr; gap:64px; }
+  .contact-info h3 { font-family:'Cormorant Garamond',serif; font-size:30px; color:var(--navy); margin-bottom:28px; letter-spacing:-.2px; }
+  .contact-detail { display:flex; gap:18px; margin-bottom:26px; align-items:flex-start; }
+  .contact-icon {
+    width:50px; height:50px;
+    background:linear-gradient(135deg, var(--orange), var(--orange-light));
+    border-radius:12px; display:flex; align-items:center; justify-content:center;
+    font-size:20px; flex-shrink:0; box-shadow:0 6px 20px var(--orange-glow);
+    transition:transform .25s;
+  }
+  .contact-detail:hover .contact-icon { transform:scale(1.1) rotate(-3deg); }
+  .contact-detail-text strong { display:block; color:var(--navy); font-size:15px; margin-bottom:3px; font-weight:600; }
+  .contact-detail-text span { color:var(--text-light); font-size:14px; line-height:1.65; }
+  .contact-form {
+    background:var(--white); border-radius:20px; padding:44px;
+    box-shadow:0 16px 64px rgba(21,101,192,.12);
+    border:1px solid rgba(21,101,192,.08);
+  }
+  .contact-form h3 { font-family:'Cormorant Garamond',serif; font-size:28px; color:var(--navy); margin-bottom:28px; }
+  .form-row { display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+  .form-group { margin-bottom:20px; }
+  .form-group label { display:block; font-size:13px; font-weight:600; color:var(--navy); margin-bottom:8px; letter-spacing:.4px; text-transform:uppercase; }
+  .form-group input, .form-group select, .form-group textarea {
+    width:100%; padding:13px 18px; border:1.5px solid var(--border);
+    border-radius:10px; font-size:15px; color:var(--text);
+    font-family:'DM Sans', sans-serif; transition:all .2s; outline:none;
+    background:var(--gray-bg);
+  }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+    border-color:var(--orange); box-shadow:0 0 0 4px rgba(232,119,34,.1);
+    background:var(--white);
+  }
+  .form-group textarea { resize:vertical; min-height:120px; }
+  .field-err { display:block; color:#e53935; font-size:12.5px; margin-top:5px; font-weight:500; min-height:16px; }
+  .form-group input.invalid, .form-group select.invalid, .form-group textarea.invalid {
+    border-color:#e53935 !important;
+    box-shadow:0 0 0 3px rgba(229,57,53,.12) !important;
+  }
+  #btnWA.active-mode { box-shadow:0 4px 16px rgba(37,211,102,.4); transform:translateY(-1px); }
+  #btnEmail.active-mode { background:var(--orange) !important; color:#fff !important; box-shadow:0 4px 16px var(--orange-glow); transform:translateY(-1px); }
+  .form-submit {
+    width:100%; padding:16px; font-family:'DM Sans',sans-serif;
+    background:linear-gradient(135deg, var(--orange), var(--orange-light));
+    color:#fff; border:none; border-radius:50px; font-size:16px; font-weight:700;
+    cursor:pointer; transition:all .25s;
+    box-shadow:0 6px 24px var(--orange-glow);
+  }
+  .form-submit:hover { transform:translateY(-3px); box-shadow:0 12px 36px var(--orange-glow); filter:brightness(1.05); }
+  .success-msg { display:none; background:#e8f5e9; border:1px solid #a5d6a7; color:#2e7d32; padding:14px 18px; border-radius:10px; margin-top:14px; font-weight:600; }
+
+  /* ── PARTNERS ── */
+  .partners-section { padding:56px 0; background:var(--white); border-top:1px solid var(--border); }
+  .partners-label { text-align:center; color:var(--text-light); font-size:12px; font-weight:700; letter-spacing:3px; text-transform:uppercase; margin-bottom:32px; }
+  .partners-row { display:flex; flex-wrap:wrap; justify-content:center; gap:16px; align-items:center; }
+  .partner-chip {
+    background:var(--gray-bg); border:1px solid var(--border);
+    border-radius:50px; padding:10px 24px;
+    color:var(--navy); font-weight:700; font-size:13px;
+    box-shadow:0 2px 8px rgba(21,101,192,.06);
+    transition:all .25s;
+  }
+  .partner-chip:hover {
+    background:var(--navy); color:#fff;
+    box-shadow:0 6px 20px var(--blue-glow);
+    transform:translateY(-2px);
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background:linear-gradient(135deg, var(--navy-deeper) 0%, #0c1e3a 100%);
+    color:#7090b8; padding:72px 0 0;
+    position:relative; overflow:hidden;
+  }
+  footer::before {
+    content:''; position:absolute; top:0; left:0; right:0; height:3px;
+    background:linear-gradient(90deg, var(--navy), var(--orange), var(--orange-light), var(--navy));
+  }
+  .footer-grid { display:grid; grid-template-columns:1.6fr 1fr 1fr 1fr; gap:56px; padding-bottom:56px; }
+  .footer-brand img { height:54px; margin-bottom:18px; opacity:1; filter:drop-shadow(0 2px 8px rgba(0,0,0,0.2)); }
+  .footer-brand p { font-size:14px; line-height:1.85; max-width:260px; color:#5a7090; }
+  .footer-brand-social { display:flex; gap:10px; margin-top:20px; }
+  .footer-brand-social a {
+    width:36px; height:36px; border-radius:50%;
+    background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.1);
+    display:flex; align-items:center; justify-content:center; color:#7090b8;
+    text-decoration:none; font-size:14px; transition:all .25s;
+  }
+  .footer-brand-social a:hover { background:var(--orange); border-color:var(--orange); color:#fff; transform:translateY(-2px); }
+  .footer-col h4 {
+    color:#fff; font-size:13px; font-weight:700; letter-spacing:2px;
+    text-transform:uppercase; margin-bottom:20px; padding-bottom:12px;
+    border-bottom:1px solid rgba(232,119,34,.25);
+    position:relative;
+  }
+  .footer-col ul { list-style:none; }
+  .footer-col ul li { margin-bottom:12px; }
+  .footer-col ul li a {
+    color:#5a7090; text-decoration:none; font-size:14px;
+    transition:all .2s; display:inline-flex; align-items:center; gap:6px;
+  }
+  .footer-col ul li a::before { content:'›'; color:var(--orange); opacity:0; transition:opacity .15s; }
+  .footer-col ul li a:hover { color:#fff; gap:10px; }
+  .footer-col ul li a:hover::before { opacity:1; }
+  .footer-bottom {
+    border-top:1px solid rgba(255,255,255,.06);
+    padding:22px 0; display:flex; justify-content:space-between;
+    align-items:center; font-size:13px; color:#3a5070;
+  }
+
+  /* ── WHATSAPP FLOAT ── */
+  .hamburger {
+    display:none; flex-direction:column; gap:5px;
+    background:none; border:none; cursor:pointer; padding:6px;
+    z-index:999;
+  }
+  .hamburger span {
+    display:block; width:24px; height:2px;
+    background:var(--navy); border-radius:2px;
+    transition:all .3s;
+  }
+  .hamburger.open span:nth-child(1) { transform:rotate(45deg) translate(5px,5px); }
+  .hamburger.open span:nth-child(2) { opacity:0; }
+  .hamburger.open span:nth-child(3) { transform:rotate(-45deg) translate(5px,-5px); }
+  .float-cta {
+    position:fixed; bottom:28px; right:28px; z-index:9999;
+    background:#25d366; color:#fff; border:none;
+    width:62px; height:62px; border-radius:50%; font-size:24px;
+    cursor:pointer; box-shadow:0 6px 28px rgba(37,211,102,.5);
+    display:flex; align-items:center; justify-content:center;
+    transition:transform .2s, box-shadow .2s; text-decoration:none;
+  }
+  .float-cta:hover { transform:scale(1.12); box-shadow:0 8px 32px rgba(37,211,102,.65); }
+  .float-cta::before {
+    content:''; position:absolute; width:100%; height:100%; border-radius:50%;
+    background:#25d366; animation:waPing 2s ease infinite; z-index:-1;
+  }
+  @keyframes waPing { 0%{transform:scale(1);opacity:.6} 100%{transform:scale(1.6);opacity:0} }
+
+  /* ── SCROLL ANIMATIONS ── */
+  @keyframes marquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+  .reveal { opacity:0; transform:translateY(30px); transition:opacity .6s ease, transform .6s ease; }
+  .reveal.visible { opacity:1; transform:translateY(0); }
+
+  /* ── RESPONSIVE ── */
+  /* ── RESPONSIVE ── */
+  @media(max-width:960px) {
+    .hero h1 { font-size:42px; }
+    .hero-stats { gap:28px; }
+    .welcome-grid, .about-grid, .service-detail-grid, .contact-grid { grid-template-columns:1fr; }
+    .services-grid, .why-grid, .testi-grid { grid-template-columns:1fr 1fr; }
+    .journey-steps { grid-template-columns:repeat(3,1fr); }
+    .journey-steps::before { display:none; }
+    .footer-grid { grid-template-columns:1fr 1fr; gap:32px; }
+    .service-detail-grid.reverse { direction:ltr; }
+    .welcome-badge-float { bottom:-14px; right:-10px; }
+  }
+
+  @media(max-width:640px) {
+    /* Topbar */
+    .topbar-hide-sm { display:none; }
+    .topbar .container { justify-content:space-between; }
+    .topbar-contact { gap:12px; font-size:12px; }
+    .topbar-social a { width:24px; height:24px; }
+
+    /* Navbar */
+    .nav-links { display:none; flex-direction:column; position:absolute;
+      top:100%; left:0; right:0; background:#fff;
+      box-shadow:0 8px 32px rgba(21,101,192,.15);
+      padding:12px 0; z-index:998; border-top:3px solid var(--orange); }
+    .nav-links.open { display:flex; }
+    .nav-links > li { width:100%; }
+    .nav-links > li > a { padding:13px 24px; border-bottom:1px solid var(--border); font-size:15px; }
+    .nav-links > li > a::after { display:none; }
+    .nav-cta { margin:12px 16px 4px; border-radius:50px !important; text-align:center; }
+    .dropdown { display:none !important; }
+    .hamburger { display:flex; }
+    .nav-inner { position:relative; }
+
+    /* Hero */
+    .hero { min-height:auto; padding:20px 0; }
+    .hero-content { padding:40px 0 32px; }
+    .hero h1 { font-size:30px; }
+    .hero-sub { font-size:15px; }
+    .hero-btns { flex-direction:column; gap:10px; }
+    .hero-btns .btn { text-align:center; }
+    .hero-stats { gap:16px; flex-wrap:wrap; }
+    .stat-num { font-size:30px; }
+    .hero-accent { display:none; }
+    .hero-accent-line { display:none; }
+
+    /* Sections */
+    .welcome-section, .services-section, .journey-section,
+    .why-section, .testimonials-section, .partners-section,
+    .about-content, .services-detail-section, .contact-section { padding:56px 0; }
+
+    .section-header h2 { font-size:28px; }
+    .section-header p { font-size:15px; }
+
+    /* Grids */
+    .services-grid, .why-grid, .testi-grid { grid-template-columns:1fr; }
+    .journey-steps { grid-template-columns:1fr 1fr; gap:24px; }
+    .footer-grid { grid-template-columns:1fr; gap:28px; }
+    .form-row { grid-template-columns:1fr; }
+    .values-grid { grid-template-columns:1fr !important; }
+    .vision-list { grid-template-columns:1fr; }
+
+    /* Welcome */
+    .welcome-img-wrap { margin-bottom:40px; }
+    .welcome-badge-float { bottom:-14px; right:8px; padding:14px 18px; }
+    .welcome-badge-float strong { font-size:26px; }
+
+    /* Contact */
+    .contact-grid { grid-template-columns:1fr; }
+    .contact-form { padding:24px 18px; }
+
+    /* About hero / page heroes */
+    .about-hero h1, .services-hero h1, .contact-hero h1 { font-size:32px; }
+    .about-hero p, .services-hero p, .contact-hero p { font-size:15px; }
+    .about-hero, .services-hero, .contact-hero { padding:48px 0; }
+
+    /* Vision box */
+    .vision-box { padding:28px 24px; }
+    .vision-box h3 { font-size:24px; }
+
+    /* Service detail */
+    .service-detail-img img { height:220px; }
+    .service-detail-text h2 { font-size:26px; }
+
+    /* Journey page steps */
+    .services-detail-section > .container > div[style*="max-width:820px"] > div[style*="display:flex"] {
+      flex-direction:column; gap:16px; padding:20px;
+    }
+
+    /* Footer */
+    .footer-bottom { flex-direction:column; gap:8px; text-align:center; }
+    .footer-brand img { height:44px; }
+
+    /* Partners */
+    .partners-row { gap:10px; }
+    .partner-chip { padding:8px 16px; font-size:12px; }
+
+    /* Map directions button */
+    .map-dir-btn { padding:8px 12px !important; font-size:12px !important; }
+  }
+
+  @media(max-width:400px) {
+    .hero h1 { font-size:26px; }
+    .container { padding:0 16px; }
+    .contact-form { padding:20px 14px; }
+    .journey-steps { grid-template-columns:1fr; }
+  }
+
+</style>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="container">
+    <div class="topbar-contact">
+      <span>📞 <a href="tel:+916360893487" style="color:#9ab0d4;text-decoration:none;">+91 63608 93487</a></span>
+      <span class="topbar-hide-sm">✉️ <a href="/cdn-cgi/l/email-protection#37565d565943564758555f5847565b77505a565e5b1954585a" style="color:#9ab0d4;text-decoration:none;"><span class="__cf_email__" data-cfemail="90f1faf1fee4f1e0fff2f8ffe0f1fcd0f7fdf1f9fcbef3fffd">[email&#160;protected]</span></a></span>
+      <span class="topbar-hide-sm">🕐 Mon–Sat: 9am – 6pm</span>
+    </div>
+    <div class="topbar-social">
+      <a href="#" title="Facebook" aria-label="Facebook">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
+      </a>
+      <a href="#" title="Instagram" aria-label="Instagram">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+      </a>
+      <a href="#" title="YouTube" aria-label="YouTube">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M22.54 6.42a2.78 2.78 0 00-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 00-1.95 1.96A29 29 0 001 12a29 29 0 00.46 5.58A2.78 2.78 0 003.41 19.6C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 001.95-1.95A29 29 0 0023 12a29 29 0 00-.46-5.58zM9.75 15.02V8.98L15.5 12l-5.75 3.02z"/></svg>
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <div class="container">
+    <div class="nav-inner">
+      <div class="logo" onclick="showPage('home',null); return false;" style="cursor:pointer;" title="Go to Home">
+        <img src="ajanta-logo.png" alt="Ajanta Mobility Solutions">
+      </div>
+      <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#" class="active" onclick="showPage('home',this)">Home</a></li>
+        <li id="servicesMenu" onmouseenter="openDropdown()" onmouseleave="closeDropdown()">
+          <a href="javascript:void(0)" onclick="return false;" style="cursor:default;user-select:none;">Services ▾</a>
+          <div class="dropdown" id="servicesDropdown">
+            <a href="javascript:void(0)" onclick="goToService('section-prosthetics')">Prosthetics</a>
+            <a href="javascript:void(0)" onclick="goToService('section-orthotics')">Orthotics</a>
+            <a href="javascript:void(0)" onclick="goToService('section-pediatrics')">Pediatrics</a>
+            <a href="javascript:void(0)" onclick="goToService('section-diabetic')">Diabetic & Compression</a>
+          </div>
+        </li>
+        <li><a href="javascript:void(0)" onclick="showPage('journey',this)">Patient Journey</a></li>
+        <li><a href="javascript:void(0)" onclick="showPage('about',this)">About Us</a></li>
+        <li><a href="javascript:void(0)" onclick="showPage('contact',this)" class="nav-cta btn">Book Appointment</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- ████ HOME PAGE ████ -->
+<div id="home" class="page-section active">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg-shape"></div>
+    <div class="hero-accent"></div>
+    <div class="container">
+      <div class="hero-content fade-up">
+        <span class="hero-badge">Established Since 1998</span>
+        <h1>Motion Restored,<br><span>Lives Rebuilt.</span></h1>
+        <p class="hero-sub">Advanced Prosthetic & Orthotic rehabilitation services, precision-engineered to the unique physiological needs of every individual.</p>
+        <div class="hero-btns">
+          <a href="#" class="btn btn-primary" onclick="showPage('contact',null)">Book a Consultation</a>
+          <a href="#" class="btn btn-outline" onclick="goToService('section-prosthetics')">Our Services</a>
+        </div>
+        <div class="hero-stats">
+          <div class="stat-item">
+            <div class="stat-num">25+</div>
+            <div class="stat-label">Years of Excellence</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-num">5000+</div>
+            <div class="stat-label">Patients Served</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-num">98%</div>
+            <div class="stat-label">Satisfaction Rate</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- TAGLINE STRIP -->
+  <div style="background:linear-gradient(90deg,var(--navy-deeper),var(--navy-dark),var(--navy-deeper));padding:18px 0;overflow:hidden;position:relative;">
+    <div style="display:flex;gap:64px;white-space:nowrap;animation:marquee 22s linear infinite;width:max-content;">
+      <span style="color:rgba(255,255,255,.35);font-size:13px;font-weight:500;letter-spacing:3px;text-transform:uppercase;">Motion Restored</span>
+      <span style="color:var(--orange);font-size:16px;">✦</span>
+      <span style="color:rgba(255,255,255,.35);font-size:13px;font-weight:500;letter-spacing:3px;text-transform:uppercase;">Lives Rebuilt</span>
+      <span style="color:var(--orange);font-size:16px;">✦</span>
+      <span style="color:rgba(255,255,255,.35);font-size:13px;font-weight:500;letter-spacing:3px;text-transform:uppercase;">Advanced Prosthetics & Orthotics</span>
+      <span style="color:var(--orange);font-size:16px;">✦</span>
+      <span style="color:rgba(255,255,255,.35);font-size:13px;font-weight:500;letter-spacing:3px;text-transform:uppercase;">Since 1998</span>
+      <span style="color:var(--orange);font-size:16px;">✦</span>
+      <span style="color:rgba(255,255,255,.35);font-size:13px;font-weight:500;letter-spacing:3px;text-transform:uppercase;">Motion Restored</span>
+      <span style="color:var(--orange);font-size:16px;">✦</span>
+      <span style="color:rgba(255,255,255,.35);font-size:13px;font-weight:500;letter-spacing:3px;text-transform:uppercase;">Lives Rebuilt</span>
+      <span style="color:var(--orange);font-size:16px;">✦</span>
+      <span style="color:rgba(255,255,255,.35);font-size:13px;font-weight:500;letter-spacing:3px;text-transform:uppercase;">Advanced Prosthetics & Orthotics</span>
+      <span style="color:var(--orange);font-size:16px;">✦</span>
+      <span style="color:rgba(255,255,255,.35);font-size:13px;font-weight:500;letter-spacing:3px;text-transform:uppercase;">Since 1998</span>
+      <span style="color:var(--orange);font-size:16px;">✦</span>
+    </div>
+  </div>
+  <!-- WELCOME -->
+  <section class="welcome-section">
+    <div class="container">
+      <div class="welcome-grid">
+        <div class="welcome-img-wrap">
+          <img src="https://images.unsplash.com/photo-1576765607924-3f7b8410a787?w=700&q=80" alt="Clinical Care">
+          <div class="welcome-badge-float">
+            <strong>25+</strong>
+            <span>Years of<br>Excellence</span>
+          </div>
+        </div>
+        <div class="welcome-text">
+          <span class="section-tag">Welcome to AJANTA</span>
+          <h2>Leading-Edge Prosthetic & Orthotic Care Since 1998</h2>
+          <p>AJANTA is a leading edge in the field of Prosthetic and Orthotic, dedicated to restoring mobility and independence through advanced rehabilitative care. Founded on a commitment to innovation and patient-centric solutions, we have established a reputation for excellence in providing high-performance assistive technology.</p>
+          <p>Our mission is to bridge the gap between physical limitation and an active lifestyle by delivering international-standard prosthesis and orthosis precisely engineered to the unique physiological needs of every individual.</p>
+          <ul class="check-list">
+            <li>Evidence-based clinical decision making</li>
+            <li>Precision custom fabrication in-house</li>
+            <li>Multidisciplinary coordination & follow-up</li>
+            <li>International-standard technology & materials</li>
+            <li>Compassionate, patient-centered care</li>
+          </ul>
+          <a href="#" class="btn btn-primary" onclick="showPage('about',null)" style="margin-top:16px;">Learn More About Us</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES PREVIEW -->
+  <section class="services-section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">What We Offer</span>
+        <h2>Our Core Services</h2>
+        <p>Comprehensive prosthetic and orthotic solutions for every stage of rehabilitation and functional recovery.</p>
+        <div class="divider"></div>
+      </div>
+      <div class="services-grid">
+        <div class="service-card">
+          <div class="service-card-img">
+            <img src="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=600&q=80" alt="Prosthetics">
+            <span class="service-card-tag">Prosthetics</span>
+          </div>
+          <div class="service-card-body">
+            <h3>Prosthetic Solutions</h3>
+            <p>Advanced lower and upper limb prosthetic systems including microprocessor-controlled, hydraulic, and myoelectric technologies tailored to your functional goals.</p>
+            <a href="javascript:void(0)" class="btn-link" onclick="goToService('section-orthotics')">Learn More →</a>
+          </div>
+        </div>
+        <div class="service-card">
+          <div class="service-card-img">
+            <img src="https://images.unsplash.com/photo-1582719471384-894fbb16e074?w=600&q=80" alt="Orthotics">
+            <span class="service-card-tag">Orthotics</span>
+          </div>
+          <div class="service-card-body">
+            <h3>Orthotic Devices</h3>
+            <p>Custom spinal, lower-limb, and upper-limb orthotic solutions — from AFOs and KAFOs to spinal bracing — designed to enhance function and prevent deformity.</p>
+            <a href="javascript:void(0)" class="btn-link" onclick="goToService('section-pediatrics')">Learn More →</a>
+          </div>
+        </div>
+        <div class="service-card">
+          <div class="service-card-img">
+            <img src="https://images.unsplash.com/photo-1587854692152-cbe660dbde88?w=600&q=80" alt="Pediatrics">
+            <span class="service-card-tag">Pediatrics</span>
+          </div>
+          <div class="service-card-body">
+            <h3>Pediatric Care</h3>
+            <p>Specialized prosthetic and orthotic care for children, supporting growth, development and an active childhood with solutions engineered for young bodies.</p>
+            <a href="javascript:void(0)" class="btn-link" onclick="goToService('section-prosthetics')">Learn More →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PATIENT JOURNEY -->
+  <section class="journey-section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">How It Works</span>
+        <h2>The Process: From Consultation to Mobility</h2>
+        <p>A structured, outcome-oriented pathway to restore your independence — step by step.</p>
+        <div class="divider"></div>
+      </div>
+      <div class="journey-steps">
+        <div class="step-item">
+          <div class="step-num">1</div>
+          <div class="step-icon">🩺</div>
+          <h4>Initial Assessment</h4>
+          <p>Evaluate your physical condition, medical history, and personal mobility goals.</p>
+        </div>
+        <div class="step-item">
+          <div class="step-num">2</div>
+          <div class="step-icon">📐</div>
+          <h4>Digital Scanning & Casting</h4>
+          <p>3D scanning or plaster casting to capture the exact contours for a perfect fit.</p>
+        </div>
+        <div class="step-item">
+          <div class="step-num">3</div>
+          <div class="step-icon">⚙️</div>
+          <h4>Custom Fabrication</h4>
+          <p>In-house team crafts your device with carbon fibre, plastics & titanium.</p>
+        </div>
+        <div class="step-item">
+          <div class="step-num">4</div>
+          <div class="step-icon">🚶</div>
+          <h4>Final Fitting & Trial</h4>
+          <p>Diagnostic check-socket fitting with dynamic alignments as you walk or move.</p>
+        </div>
+        <div class="step-item">
+          <div class="step-num">5</div>
+          <div class="step-icon">🌟</div>
+          <h4>Long-Term Success</h4>
+          <p>Ongoing adjustments, gait training, and structured follow-up monitoring.</p>
+        </div>
+      </div>
+      <div style="text-align:center;margin-top:44px;">
+        <a href="#" class="btn btn-primary" onclick="showPage('journey',null)">View Full Patient Journey</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY CHOOSE US -->
+  <section class="why-section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Why Ajanta</span>
+        <h2>Why Choose AJANTA?</h2>
+        <p>What sets us apart in the field of prosthetic and orthotic rehabilitation.</p>
+        <div class="divider"></div>
+      </div>
+      <div class="why-grid">
+        <div class="why-card">
+          <div class="why-card-icon">🏥</div>
+          <h3>Clinical Excellence</h3>
+          <p>Exceptional clinical knowledge and evidence-based practice guide every prescription and fitting decision we make.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-card-icon">⚗️</div>
+          <h3>Advanced Fabrication</h3>
+          <p>Our in-house laboratory uses advanced techniques — carbon fibre, titanium, and flexible composites — for precise, durable devices.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-card-icon">🤝</div>
+          <h3>Patient-Centered</h3>
+          <p>Your assistive technology is customized to your lifestyle, not the other way around. Your goals are at the centre of everything.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-card-icon">📊</div>
+          <h3>Outcome Tracking</h3>
+          <p>Transparent documentation and structured follow-up protocols ensure measurable functional improvement over time.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-card-icon">👶</div>
+          <h3>All Ages & Conditions</h3>
+          <p>From pediatric care to adult rehabilitation, we manage neurological, orthopedic, diabetic, congenital, and post-amputation conditions.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-card-icon">🌐</div>
+          <h3>International Standards</h3>
+          <p>Partnering with global technology leaders to bring cutting-edge assistive solutions to every patient we serve.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="testimonials-section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Patient Stories</span>
+        <h2>What Our Patients Say</h2>
+        <p>Real experiences from the people we've had the privilege to serve.</p>
+        <div class="divider"></div>
+      </div>
+      <div class="testi-grid">
+        <div class="testi-card">
+          <div class="testi-stars">★★★★★</div>
+          <p class="testi-text">The team at Ajanta gave me back my confidence. My prosthetic leg feels like a natural extension — I can walk, climb stairs, and even jog now. I'm living life on my terms again.</p>
+          <div class="testi-author">
+            <div class="testi-avatar">R</div>
+            <div>
+              <div class="testi-name">Ramesh Sharma</div>
+              <div class="testi-role">Below-knee amputee, Delhi</div>
+            </div>
+          </div>
+        </div>
+        <div class="testi-card">
+          <div class="testi-stars">★★★★★</div>
+          <p class="testi-text">After my stroke, the AFO fitted by Ajanta completely transformed my gait. The clinical team was compassionate, thorough, and always available. Truly world-class care.</p>
+          <div class="testi-author">
+            <div class="testi-avatar">P</div>
+            <div>
+              <div class="testi-name">Priya Nair</div>
+              <div class="testi-role">Orthotic patient, Mumbai</div>
+            </div>
+          </div>
+        </div>
+        <div class="testi-card">
+          <div class="testi-stars">★★★★★</div>
+          <p class="testi-text">My son has been wearing a pediatric KAFO from Ajanta since he was 5. They understand children's needs — the device is comfortable, durable, and he barely notices it.</p>
+          <div class="testi-author">
+            <div class="testi-avatar">A</div>
+            <div>
+              <div class="testi-name">Aarti Mehta</div>
+              <div class="testi-role">Parent of pediatric patient, Bengaluru</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PARTNERS -->
+  <section class="partners-section">
+    <div class="container">
+      <div class="partners-label">Technology Partners & Associations</div>
+      <div class="partners-row">
+        <div class="partner-chip">OSSUR</div>
+        <div class="partner-chip">ORTHOMERICA</div>
+        <div class="partner-chip">OTTOBOCK</div>
+        <div class="partner-chip">ALPS</div>
+        <div class="partner-chip">TRULIFE</div>
+        <div class="partner-chip">PROTEOR</div>
+        <div class="partner-chip">ULTRAFLEX</div>
+      </div>
+    </div>
+  </section>
+
+</div><!-- END HOME -->
+
+<!-- ████ SERVICES PAGE ████ -->
+<div id="services" class="page-section">
+  <div class="services-hero">
+    <div class="container">
+      <span class="section-tag">What We Offer</span>
+      <h1>Our Services</h1>
+      <p>Comprehensive orthotic and prosthetic solutions across all age groups and clinical conditions.</p>
+    </div>
+  </div>
+
+  <section class="services-detail-section">
+    <div class="container">
+
+      <!-- PROSTHETICS -->
+      <div class="service-detail-block" id="section-prosthetics">
+        <div class="service-detail-grid">
+          <div class="service-detail-img">
+            <img src="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=800&q=80" alt="Prosthetics">
+          </div>
+          <div class="service-detail-text">
+            <span class="section-tag">Prosthetics</span>
+            <h2>Advanced Prosthetic Solutions</h2>
+            <p>We provide precision-engineered prosthetic systems for both lower and upper limb amputees — designed around your functional goals, activity level, and lifestyle.</p>
+            <p><strong>Lower Limb:</strong> Advanced prosthetic knee systems including microprocessor-controlled, hydraulic, and polycentric mechanisms. Energy Storage & Release prosthetic feet for dynamic propulsion and shock absorption.</p>
+            <p><strong>Upper Limb:</strong> Body-powered, myoelectric, and cosmetic prosthetic systems tailored for dexterity, grip functionality, and aesthetic restoration.</p>
+            <div class="conditions-box">
+              <h4>Clinical Goals</h4>
+              <div class="conditions-list">
+                <span class="cond-pill">Stance stability</span>
+                <span class="cond-pill">Terrain adaptability</span>
+                <span class="cond-pill">Reduced fall risk</span>
+                <span class="cond-pill">Improved gait symmetry</span>
+                <span class="cond-pill">Dexterity enhancement</span>
+                <span class="cond-pill">Aesthetic restoration</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <hr class="service-divider">
+
+      <!-- ORTHOTICS -->
+      <div class="service-detail-block" id="section-orthotics">
+        <div class="service-detail-grid reverse">
+          <div class="service-detail-img">
+            <img src="https://images.unsplash.com/photo-1582719471384-894fbb16e074?w=800&q=80" alt="Orthotics">
+          </div>
+          <div class="service-detail-text">
+            <span class="section-tag">Orthotics</span>
+            <h2>Custom Orthotic Devices</h2>
+            <p><strong>Ankle Foot Orthosis (AFO):</strong> Advanced orthotic intervention designed to enhance ankle stability, improve gait mechanics, and prevent secondary deformities.</p>
+            <div class="conditions-box" style="margin-bottom:16px;">
+              <h4>AFO Indications</h4>
+              <div class="conditions-list">
+                <span class="cond-pill">Stroke</span><span class="cond-pill">Cerebral Palsy</span><span class="cond-pill">Foot Drop</span><span class="cond-pill">Peripheral Neuropathy</span><span class="cond-pill">Multiple Sclerosis</span>
+              </div>
+            </div>
+            <p><strong>KAFO:</strong> Comprehensive stabilisation for patients with significant lower-limb weakness or neuromuscular compromise, with stance-control, carbon composite, and microprocessor-assisted options.</p>
+            <p><strong>Spinal Orthotics:</strong> Custom spinal bracing for scoliosis, vertebral fractures, post-operative stabilisation, and degenerative spinal conditions.</p>
+            <div class="service-tags">
+              <span class="service-tag">Gait Optimisation</span>
+              <span class="service-tag">Deformity Prevention</span>
+              <span class="service-tag">Energy Efficiency</span>
+              <span class="service-tag">Balance & Safety</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <hr class="service-divider">
+
+      <!-- PEDIATRICS -->
+      <div class="service-detail-block" id="section-pediatrics">
+        <div class="service-detail-grid">
+          <div class="service-detail-img">
+            <img src="https://images.unsplash.com/photo-1587854692152-cbe660dbde88?w=800&q=80" alt="Pediatric Care">
+          </div>
+          <div class="service-detail-text">
+            <span class="section-tag">Pediatrics</span>
+            <h2>Specialized Pediatric Care</h2>
+            <p>Children's prosthetic and orthotic needs are unique — their devices must accommodate rapid growth, high activity levels, and the developmental demands of childhood.</p>
+            <p>Our pediatric specialists work closely with families to create solutions that support every milestone: walking, running, playing, and thriving. Devices are lightweight, durable, and designed to grow alongside your child.</p>
+            <p>We manage congenital limb differences, cerebral palsy, spina bifida, and post-surgical rehabilitation across all pediatric age groups.</p>
+            <div class="conditions-box">
+              <h4>Pediatric Conditions We Treat</h4>
+              <div class="conditions-list">
+                <span class="cond-pill">Congenital limb differences</span>
+                <span class="cond-pill">Cerebral Palsy</span>
+                <span class="cond-pill">Spina Bifida</span>
+                <span class="cond-pill">Club Foot</span>
+                <span class="cond-pill">Scoliosis</span>
+                <span class="cond-pill">Post-surgical rehab</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <hr class="service-divider">
+
+      <!-- DIABETIC & COMPRESSION -->
+      <div class="service-detail-block" id="section-diabetic">
+        <div class="service-detail-grid reverse">
+          <div class="service-detail-img">
+            <img src="https://images.unsplash.com/photo-1631217868264-e5b90bb7e133?w=800&q=80" alt="Diabetic Care">
+          </div>
+          <div class="service-detail-text">
+            <span class="section-tag">Diabetic & Compression</span>
+            <h2>Diabetic Foot & Compression Care</h2>
+            <p><strong>Diabetic Foot Preservation:</strong> Comprehensive pressure redistribution strategies utilising custom accommodative orthoses and specialised footwear to prevent ulceration, reduce infection risk, and preserve limb integrity.</p>
+            <p><strong>Therapeutic Compression:</strong> Medical-grade compression garments for post-burn rehabilitation, lymphoedema, vascular insufficiency, and post-surgical management — designed for oedema control, scar modulation, and tissue stabilisation.</p>
+            <div class="service-tags">
+              <span class="service-tag">Ulcer Prevention</span>
+              <span class="service-tag">Lymphoedema</span>
+              <span class="service-tag">Post-Burn Rehab</span>
+              <span class="service-tag">Scar Modulation</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+</div><!-- END SERVICES -->
+
+<!-- ████ PATIENT JOURNEY PAGE ████ -->
+<div id="journey" class="page-section">
+  <div class="services-hero">
+    <div class="container">
+      <span class="section-tag">Our Process</span>
+      <h1>Patient Journey</h1>
+      <p>From your first consultation to long-term mobility success — every step, explained.</p>
+    </div>
+  </div>
+  <section class="services-detail-section">
+    <div class="container">
+      <div class="section-header" style="margin-bottom:56px;">
+        <span class="section-tag">The How It Works</span>
+        <h2>From Consultation to Mobility</h2>
+        <p>Every intervention at AJANTA follows a structured, outcome-oriented clinical pathway.</p>
+        <div class="divider"></div>
+      </div>
+      <!-- Step by Step -->
+      <div style="max-width:820px;margin:0 auto;">
+
+        <div style="display:flex;gap:28px;align-items:flex-start;margin-bottom:44px;padding:32px;background:var(--white);border-radius:10px;box-shadow:0 4px 24px rgba(26,46,74,.08);border-left:5px solid var(--orange);">
+          <div style="width:64px;height:64px;background:var(--navy);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:#fff;flex-shrink:0;">1</div>
+          <div>
+            <h3 style="font-family:'Playfair Display',serif;font-size:24px;color:var(--navy);margin-bottom:10px;">Initial Assessment</h3>
+            <p style="color:var(--text-light);line-height:1.8;font-size:16px;">We sit down with you to evaluate your physical condition, review your complete medical history, and discuss your personal mobility goals. This is a comprehensive clinical consultation that forms the foundation of your treatment plan.</p>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:28px;align-items:flex-start;margin-bottom:44px;padding:32px;background:var(--white);border-radius:10px;box-shadow:0 4px 24px rgba(26,46,74,.08);border-left:5px solid var(--orange);">
+          <div style="width:64px;height:64px;background:var(--navy);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:#fff;flex-shrink:0;">2</div>
+          <div>
+            <h3 style="font-family:'Playfair Display',serif;font-size:24px;color:var(--navy);margin-bottom:10px;">Digital Scanning & Casting</h3>
+            <p style="color:var(--text-light);line-height:1.8;font-size:16px;">Using traditional plaster casting or advanced 3D scanning, we capture the exact contours of your limb or body for a flawless custom fit. Our biomechanical and gait analysis ensures every measurement is precise and purposeful.</p>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:28px;align-items:flex-start;margin-bottom:44px;padding:32px;background:var(--white);border-radius:10px;box-shadow:0 4px 24px rgba(26,46,74,.08);border-left:5px solid var(--orange);">
+          <div style="width:64px;height:64px;background:var(--navy);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:#fff;flex-shrink:0;">3</div>
+          <div>
+            <h3 style="font-family:'Playfair Display',serif;font-size:24px;color:var(--navy);margin-bottom:10px;">Custom Fabrication</h3>
+            <p style="color:var(--text-light);line-height:1.8;font-size:16px;">Our in-house technical team meticulously crafts your device using lightweight carbon fibre, flexible plastics, and high-grade titanium. Every component is selected and assembled with clinical precision to ensure optimal performance and durability.</p>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:28px;align-items:flex-start;margin-bottom:44px;padding:32px;background:var(--white);border-radius:10px;box-shadow:0 4px 24px rgba(26,46,74,.08);border-left:5px solid var(--orange);">
+          <div style="width:64px;height:64px;background:var(--navy);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:#fff;flex-shrink:0;">4</div>
+          <div>
+            <h3 style="font-family:'Playfair Display',serif;font-size:24px;color:var(--navy);margin-bottom:10px;">Final Fitting & Trial</h3>
+            <p style="color:var(--text-light);line-height:1.8;font-size:16px;">We perform a diagnostic check-socket fitting, making dynamic alignments while you walk or move, ensuring the final device feels like a natural extension of yourself. Functional optimisation continues until you are fully satisfied.</p>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:28px;align-items:flex-start;margin-bottom:44px;padding:32px;background:var(--navy);border-radius:10px;border-left:5px solid var(--orange);">
+          <div style="width:64px;height:64px;background:var(--orange);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:#fff;flex-shrink:0;">5</div>
+          <div>
+            <h3 style="font-family:'Playfair Display',serif;font-size:24px;color:#fff;margin-bottom:10px;">Long-Term Success & Post-Care</h3>
+            <p style="color:#8fa8c8;line-height:1.8;font-size:16px;">Our commitment doesn't end at fitting. We provide structured follow-up, outcome monitoring, gait training, adjustments, and repairs — ensuring your device performs optimally at every stage of your life. We are a trusted partner in your rehabilitation journey.</p>
+          </div>
+        </div>
+
+      </div>
+      <div style="text-align:center;margin-top:16px;">
+        <a href="#" class="btn btn-primary" onclick="showPage('contact',null)">Start Your Journey Today</a>
+      </div>
+    </div>
+  </section>
+</div><!-- END JOURNEY -->
+
+<!-- ████ ABOUT PAGE ████ -->
+<div id="about" class="page-section">
+  <div class="about-hero">
+    <div class="container">
+      <span class="section-tag">Our Story</span>
+      <h1>About Ajanta Mobility Solutions</h1>
+      <p>Dedicated to restoring mobility and independence through advanced rehabilitative care since 1998.</p>
+    </div>
+  </div>
+  <section class="about-content">
+    <div class="container">
+      <div class="about-grid">
+        <div>
+          <img src="https://images.unsplash.com/photo-1576765607924-3f7b8410a787?w=700&q=80" alt="About Ajanta" style="width:100%;border-radius:10px;box-shadow:0 16px 48px rgba(26,46,74,.16);">
+        </div>
+        <div class="about-text">
+          <span class="section-tag">The AJANTA Framework</span>
+          <h2>Clinical Excellence in Mobility Restoration</h2>
+          <p>AJANTA Mobility Solutions is a comprehensive orthotic and prosthetic rehabilitation centre committed to delivering precision-engineered, patient-specific mobility solutions. Our approach integrates advanced biomechanics, evidence-based prescription protocols, and modern fabrication technologies to optimise functional recovery across pediatric and adult populations.</p>
+          <p>We manage complex neurological, orthopedic, diabetic, congenital, and post-amputation conditions with a focus on long-term mobility, safety, and independence.</p>
+          <p>Our team of specialised and compassionate clinicians works closely with each patient to develop customised treatment protocols that prioritise functional outcomes and long-term comfort. By integrating cutting-edge technology with a dedicated focus on evidence-based care, we empower our patients to overcome physical challenges and achieve a quality of life defined by autonomy and progress.</p>
+        </div>
+      </div>
+
+      <!-- VISION -->
+      <div class="vision-box">
+        <h3>Our Vision</h3>
+        <p style="color:#b0c4de;margin-bottom:12px;">To be a leading provider of prosthetic and orthotic services, setting the benchmark for clinical excellence and patient outcomes in India.</p>
+        <ul class="vision-list">
+          <li>Exceptional clinical knowledge & evidence-based practice</li>
+          <li>Advanced laboratory techniques for precise fabrication</li>
+          <li>Superior patient outcomes and functional success</li>
+          <li>Enhanced collaboration with healthcare referrers</li>
+          <li>Continuous optimisation of clinical performance</li>
+        </ul>
+      </div>
+
+      <!-- VALUES -->
+      <div class="section-header" style="margin-bottom:36px;">
+        <span class="section-tag">What We Stand For</span>
+        <h2>Our Values</h2>
+        <div class="divider"></div>
+      </div>
+      <div class="values-grid" style="grid-template-columns:repeat(2,1fr);gap:20px;max-width:900px;margin:0 auto 56px;">
+        <div class="value-item">
+          <h4>Integrity</h4>
+          <p>Maintaining the highest ethical standards in every clinical interaction and fitting decision.</p>
+        </div>
+        <div class="value-item">
+          <h4>Empathy</h4>
+          <p>Understanding the personal journey of every patient we serve — treating each person with dignity and respect.</p>
+        </div>
+        <div class="value-item">
+          <h4>Clarity</h4>
+          <p>Providing transparent communication regarding treatment plans, device options, and expected outcomes.</p>
+        </div>
+        <div class="value-item">
+          <h4>Excellence</h4>
+          <p>Striving for technical perfection in every custom device we design and fabricate.</p>
+        </div>
+      </div>
+
+      <!-- PHILOSOPHY -->
+      <div style="background:var(--gray-bg);border-radius:10px;padding:48px;text-align:center;max-width:820px;margin:0 auto;">
+        <span class="section-tag">Our Philosophy</span>
+        <h2 style="font-family:'Playfair Display',serif;font-size:30px;color:var(--navy);margin:14px 0 18px;">People First, Always</h2>
+        <p style="color:var(--text-light);font-size:17px;line-height:1.8;">We believe that every person we serve deserves to be treated with the utmost dignity and respect. Our goal is to transform physical challenges into opportunities for growth, ensuring that your assistive technology is customised to your lifestyle — not the other way around.</p>
+      </div>
+    </div>
+  </section>
+</div><!-- END ABOUT -->
+
+<!-- ████ CONTACT PAGE ████ -->
+<div id="contact" class="page-section">
+  <div class="contact-hero">
+    <div class="container">
+      <span class="section-tag">Reach Us</span>
+      <h1>Contact & Appointments</h1>
+      <p>Begin your journey to restored mobility. Book a consultation with our clinical team today.</p>
+    </div>
+  </div>
+  <section class="contact-section">
+    <div class="container">
+      <div class="contact-grid">
+        <div class="contact-info">
+          <h3>Get In Touch</h3>
+          <div class="contact-detail">
+            <div class="contact-icon">📞</div>
+            <div class="contact-detail-text">
+              <strong>Phone</strong>
+              <span>+91 63608 93487<br>+91 63608 93487</span>
+            </div>
+          </div>
+          <div class="contact-detail">
+            <div class="contact-icon">✉️</div>
+            <div class="contact-detail-text">
+              <strong>Email</strong>
+              <span><a href="/cdn-cgi/l/email-protection#d7b6bdb6b9a3b6a7b8b5bfb8a7b6bb97b0bab6bebbf9b4b8ba" style="color:inherit;text-decoration:none;"><span class="__cf_email__" data-cfemail="b6d7dcd7d8c2d7c6d9d4ded9c6d7daf6d1dbd7dfda98d5d9db">[email&#160;protected]</span></a></span>
+            </div>
+          </div>
+          <div class="contact-detail">
+            <div class="contact-icon">📍</div>
+            <div class="contact-detail-text">
+              <strong>Location</strong>
+              <span>202-2C, Saket Nagar,<br>Opposite AIIMS Gate No. 2,<br>Bhopal, Madhya Pradesh</span>
+            </div>
+          </div>
+
+          <!-- GOOGLE MAP -->
+          <div style="margin-top:28px;border-radius:16px;overflow:hidden;box-shadow:0 8px 32px rgba(21,101,192,.15);border:1px solid var(--border);">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3666.7!2d77.4138!3d23.2123!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x397c43b9f8c44b0f%3A0x0!2sSaket+Nagar%2C+Bhopal%2C+Madhya+Pradesh!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin"
+              width="100%" height="260" style="border:0;display:block;" allowfullscreen="" loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+            <div style="background:var(--white);padding:14px 18px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--border);">
+              <div>
+                <div style="font-weight:700;color:var(--navy);font-size:14px;">Ajanta Mobility Solutions</div>
+                <div style="color:var(--text-light);font-size:13px;">202-2C Saket Nagar, Opp. AIIMS Gate 2, Bhopal</div>
+              </div>
+              <a href="https://www.google.com/maps/dir/?api=1&destination=202+Saket+Nagar+Opposite+AIIMS+Gate+2+Bhopal+Madhya+Pradesh" 
+                 target="_blank"
+                 style="display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--orange),var(--orange-light));color:#fff;padding:10px 18px;border-radius:50px;text-decoration:none;font-size:13px;font-weight:700;box-shadow:0 4px 14px var(--orange-glow);transition:all .25s;white-space:nowrap;"
+                 onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 24px var(--orange-glow)'"
+                 onmouseout="this.style.transform='';this.style.boxShadow='0 4px 14px var(--orange-glow)'">
+                🗺️ Get Directions
+              </a>
+            </div>
+          </div>
+          <div class="contact-detail">
+            <div class="contact-icon">🕐</div>
+            <div class="contact-detail-text">
+              <strong>Clinic Hours</strong>
+              <span>Monday – Saturday: 9:00 AM – 6:00 PM<br>Sunday: By appointment only</span>
+            </div>
+          </div>
+          <div style="margin-top:32px;background:var(--gray-bg);border-radius:8px;padding:24px;border-left:4px solid var(--orange);">
+            <h4 style="color:var(--navy);margin-bottom:8px;">Why Book Early?</h4>
+            <p style="color:var(--text-light);font-size:14px;line-height:1.7;">Our clinical team gives each patient dedicated time. Early booking ensures you receive priority scheduling and a comprehensive first consultation without wait times.</p>
+          </div>
+        </div>
+        <div>
+          <div class="contact-form">
+            <h3 style="font-family:'Cormorant Garamond',serif;font-size:26px;color:var(--navy);margin-bottom:6px;">Book an Appointment</h3>
+            <p style="color:var(--text-light);font-size:14px;margin-bottom:24px;">Fill in your details and we'll reach out to confirm your slot.</p>
+
+            <!-- Send via buttons -->
+            <div style="display:flex;gap:10px;margin-bottom:24px;">
+              <button type="button" onclick="setSubmitMode('whatsapp')" id="btnWA"
+                style="flex:1;padding:10px;border-radius:50px;border:2px solid #25d366;background:#25d366;color:#fff;font-weight:700;font-size:13.5px;cursor:pointer;transition:all .2s;font-family:'DM Sans',sans-serif;">
+                <span style="margin-right:6px;">💬</span> Send via WhatsApp
+              </button>
+              <button type="button" onclick="setSubmitMode('email')" id="btnEmail"
+                style="flex:1;padding:10px;border-radius:50px;border:2px solid var(--orange);background:transparent;color:var(--orange);font-weight:700;font-size:13.5px;cursor:pointer;transition:all .2s;font-family:'DM Sans',sans-serif;">
+                <span style="margin-right:6px;">✉️</span> Send via Email
+              </button>
+            </div>
+            <input type="hidden" id="submitMode" value="whatsapp">
+
+            <div class="form-row">
+              <div class="form-group">
+                <label>First Name <span style="color:var(--orange)">*</span></label>
+                <input type="text" id="f_firstname" placeholder="Your first name" oninput="clearErr('f_firstname')">
+                <span class="field-err" id="err_firstname"></span>
+              </div>
+              <div class="form-group">
+                <label>Last Name <span style="color:var(--orange)">*</span></label>
+                <input type="text" id="f_lastname" placeholder="Your last name" oninput="clearErr('f_lastname')">
+                <span class="field-err" id="err_lastname"></span>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Phone Number <span style="color:var(--orange)">*</span></label>
+                <input type="tel" id="f_phone" placeholder="+91 XXXXX XXXXX" oninput="clearErr('f_phone')">
+                <span class="field-err" id="err_phone"></span>
+              </div>
+              <div class="form-group">
+                <label>Email Address</label>
+                <input type="email" id="f_email" placeholder="your@email.com" oninput="clearErr('f_email')">
+                <span class="field-err" id="err_email"></span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Service Required <span style="color:var(--orange)">*</span></label>
+              <select id="f_service" onchange="clearErr('f_service')">
+                <option value="">– Select a service –</option>
+                <option value="Prosthetics – Lower Limb">Prosthetics – Lower Limb</option>
+                <option value="Prosthetics – Upper Limb">Prosthetics – Upper Limb</option>
+                <option value="Orthotics – AFO / KAFO">Orthotics – AFO / KAFO</option>
+                <option value="Orthotics – Spinal">Orthotics – Spinal</option>
+                <option value="Pediatric Care">Pediatric Care</option>
+                <option value="Diabetic Foot Care">Diabetic Foot Care</option>
+                <option value="Compression Therapy">Compression Therapy</option>
+                <option value="Other / Not Sure">Other / Not Sure</option>
+              </select>
+              <span class="field-err" id="err_service"></span>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Preferred Date <span style="color:var(--orange)">*</span></label>
+                <input type="date" id="f_date" oninput="clearErr('f_date')">
+                <span class="field-err" id="err_date"></span>
+              </div>
+              <div class="form-group">
+                <label>Preferred Time</label>
+                <select id="f_time">
+                  <option value="">– Select time –</option>
+                  <option value="9:00 AM – 10:00 AM">9:00 AM – 10:00 AM</option>
+                  <option value="10:00 AM – 11:00 AM">10:00 AM – 11:00 AM</option>
+                  <option value="11:00 AM – 12:00 PM">11:00 AM – 12:00 PM</option>
+                  <option value="12:00 PM – 1:00 PM">12:00 PM – 1:00 PM</option>
+                  <option value="2:00 PM – 3:00 PM">2:00 PM – 3:00 PM</option>
+                  <option value="3:00 PM – 4:00 PM">3:00 PM – 4:00 PM</option>
+                  <option value="4:00 PM – 5:00 PM">4:00 PM – 5:00 PM</option>
+                  <option value="5:00 PM – 6:00 PM">5:00 PM – 6:00 PM</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Message / Additional Details</label>
+              <textarea id="f_message" placeholder="Tell us briefly about your condition or what you're looking for..." style="min-height:100px;"></textarea>
+            </div>
+            <button class="form-submit" id="submitBtn" type="button" onclick="submitAppointment()">
+              💬 Send via WhatsApp
+            </button>
+            <div id="successMsg" style="display:none;background:linear-gradient(135deg,#e8f5e9,#f1f8e9);border:1px solid #a5d6a7;color:#2e7d32;padding:16px 20px;border-radius:12px;margin-top:16px;font-weight:600;font-size:15px;">
+              ✅ Your appointment request has been sent! We'll contact you shortly to confirm.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div><!-- END CONTACT -->
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="javascript:void(0)" onclick="showPage('home',null)" style="display:inline-block;cursor:pointer;background:#fff;border-radius:10px;padding:10px 16px;" title="Go to Home"><img src="ajanta-logo.png" alt="Ajanta Mobility Solutions" style="display:block;"></a>
+        <p>Restoring mobility, rebuilding lives. Advanced prosthetic and orthotic care with clinical precision and compassion since 1998.</p>
+        <div class="footer-brand-social">
+          <a href="#" title="Facebook">f</a>
+          <a href="#" title="Instagram">in</a>
+          <a href="#" title="YouTube">▶</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Services</h4>
+        <ul>
+          <li><a href="javascript:void(0)" onclick="showPage('services',null)">Prosthetics</a></li>
+          <li><a href="javascript:void(0)" onclick="showPage('services',null)">Orthotics</a></li>
+          <li><a href="javascript:void(0)" onclick="showPage('services',null)">Pediatric Care</a></li>
+          <li><a href="javascript:void(0)" onclick="showPage('services',null)">Diabetic Foot Care</a></li>
+          <li><a href="javascript:void(0)" onclick="showPage('services',null)">Compression Therapy</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="javascript:void(0)" onclick="showPage('about',null)">About Us</a></li>
+          <li><a href="javascript:void(0)" onclick="showPage('journey',null)">Patient Journey</a></li>
+          <li><a href="javascript:void(0)" onclick="showPage('home',null)">Testimonials</a></li>
+          <li><a href="javascript:void(0)" onclick="showPage('contact',null)">Contact Us</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="tel:+916360893487">+91 63608 93487</a></li>
+          <li><a href="/cdn-cgi/l/email-protection#b6d7dcd7d8c2d7c6d9d4ded9c6d7daf6d1dbd7dfda98d5d9db" style="color:inherit;text-decoration:none;"><span class="__cf_email__" data-cfemail="bcddd6ddd2c8ddccd3ded4d3ccddd0fcdbd1ddd5d092dfd3d1">[email&#160;protected]</span></a></li>
+          <li><a href="javascript:void(0)" onclick="showPage('contact',null)">Book Appointment</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 Ajanta Mobility Solutions. All Rights Reserved.</span>
+      <span>Motion Restored, Lives Rebuilt.</span>
+    </div>
+  </div>
+</footer>
+
+<!-- WHATSAPP FLOATING BUTTON -->
+<a href="https://wa.me/916360893487?text=Hello%2C%20I%20would%20like%20to%20book%20a%20consultation%20with%20Ajanta%20Mobility%20Solutions." 
+   class="float-cta" target="_blank" title="Chat on WhatsApp">
+  <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="white">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+  </svg>
+</a>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+// ── EMAILJS INIT ──
+(function() {
+  emailjs.init({ publicKey: 'PNhKOCnSXC5I5MkND' });
+})();
+
+// ── MOBILE MENU ──
+function toggleMenu() {
+  var nav = document.getElementById('navLinks');
+  var btn = document.getElementById('hamburger');
+  nav.classList.toggle('open');
+  btn.classList.toggle('open');
+}
+
+// Close menu when nav link clicked
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('#navLinks a').forEach(function(a) {
+    a.addEventListener('click', function() {
+      document.getElementById('navLinks').classList.remove('open');
+      document.getElementById('hamburger').classList.remove('open');
+    });
+  });
+});
+
+// ── SERVICES SCROLL NAVIGATION ──
+function goToService(sectionId) {
+  // First show the services page
+  document.querySelectorAll('.page-section').forEach(function(s) { s.classList.remove('active'); });
+  document.getElementById('services').classList.add('active');
+  // Update active nav link to none (since Services parent isn't clickable)
+  document.querySelectorAll('.nav-links > li > a').forEach(function(a) { a.classList.remove('active'); });
+  // Close mobile menu
+  var navLinks = document.getElementById('navLinks');
+  var hamburger = document.getElementById('hamburger');
+  if (navLinks) navLinks.classList.remove('open');
+  if (hamburger) hamburger.classList.remove('open');
+  // Scroll to section after short delay to allow page render
+  setTimeout(function() {
+    var target = document.getElementById(sectionId);
+    if (target) {
+      var navHeight = document.querySelector('.navbar').offsetHeight + 20;
+      var top = target.getBoundingClientRect().top + window.pageYOffset - navHeight;
+      window.scrollTo({ top: top, behavior: 'smooth' });
+    }
+  }, 80);
+  return false;
+}
+
+// ── PAGE NAVIGATION ──
+function showPage(pageId, clickedLink) {
+  document.querySelectorAll('.page-section').forEach(function(s) { s.classList.remove('active'); });
+  var target = document.getElementById(pageId);
+  if (target) target.classList.add('active');
+  document.querySelectorAll('.nav-links > li > a').forEach(function(a) { a.classList.remove('active'); });
+  if (clickedLink) clickedLink.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  setTimeout(initReveal, 100);
+  return false;
+}
+
+// ── APPOINTMENT FORM ──
+var currentMode = 'whatsapp';
+
+function setSubmitMode(mode) {
+  currentMode = mode;
+  var btnWA = document.getElementById('btnWA');
+  var btnEmail = document.getElementById('btnEmail');
+  var submitBtn = document.getElementById('submitBtn');
+  if (mode === 'whatsapp') {
+    btnWA.style.background = '#25d366';
+    btnWA.style.color = '#fff';
+    btnWA.style.border = '2px solid #25d366';
+    btnWA.style.boxShadow = '0 4px 16px rgba(37,211,102,.4)';
+    btnEmail.style.background = 'transparent';
+    btnEmail.style.color = 'var(--orange)';
+    btnEmail.style.border = '2px solid var(--orange)';
+    btnEmail.style.boxShadow = 'none';
+    submitBtn.innerHTML = '&#128172; Send via WhatsApp';
+    submitBtn.style.background = 'linear-gradient(135deg,#25d366,#128c7e)';
+    submitBtn.style.boxShadow = '0 6px 24px rgba(37,211,102,.35)';
+  } else {
+    btnEmail.style.background = 'var(--orange)';
+    btnEmail.style.color = '#fff';
+    btnEmail.style.border = '2px solid var(--orange)';
+    btnEmail.style.boxShadow = '0 4px 16px rgba(232,119,34,.4)';
+    btnWA.style.background = 'transparent';
+    btnWA.style.color = '#25d366';
+    btnWA.style.border = '2px solid #25d366';
+    btnWA.style.boxShadow = 'none';
+    submitBtn.innerHTML = '&#9993; Send via Email';
+    submitBtn.style.background = 'linear-gradient(135deg,#e87722,#f5a03a)';
+    submitBtn.style.boxShadow = '0 6px 24px rgba(232,119,34,.35)';
+  }
+}
+
+function clearErr(fieldId) {
+  var el = document.getElementById(fieldId);
+  var err = document.getElementById('err_' + fieldId.replace('f_',''));
+  if (el) el.classList.remove('invalid');
+  if (err) err.textContent = '';
+}
+
+function setErr(fieldId, message) {
+  var el = document.getElementById(fieldId);
+  var err = document.getElementById('err_' + fieldId.replace('f_',''));
+  if (el) el.classList.add('invalid');
+  if (err) err.textContent = message;
+}
+
+function validateForm() {
+  var valid = true;
+  var fn = document.getElementById('f_firstname').value.trim();
+  if (!fn || fn.length < 2) { setErr('f_firstname', fn ? 'Enter a valid first name.' : 'First name is required.'); valid = false; } else clearErr('f_firstname');
+  var ln = document.getElementById('f_lastname').value.trim();
+  if (!ln || ln.length < 2) { setErr('f_lastname', ln ? 'Enter a valid last name.' : 'Last name is required.'); valid = false; } else clearErr('f_lastname');
+  var ph = document.getElementById('f_phone').value.trim().replace(/\s+/g,'');
+  if (!ph) { setErr('f_phone', 'Phone number is required.'); valid = false; }
+  else if (!/^[+]?[0-9]{10,13}$/.test(ph)) { setErr('f_phone', 'Enter a valid 10-digit phone number.'); valid = false; }
+  else clearErr('f_phone');
+  var em = document.getElementById('f_email').value.trim();
+  if (em && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)) { setErr('f_email', 'Enter a valid email address.'); valid = false; } else clearErr('f_email');
+  var sv = document.getElementById('f_service').value;
+  if (!sv) { setErr('f_service', 'Please select a service.'); valid = false; } else clearErr('f_service');
+  var dt = document.getElementById('f_date').value;
+  if (!dt) { setErr('f_date', 'Please select a preferred date.'); valid = false; }
+  else {
+    var sel = new Date(dt + 'T00:00:00'); var today = new Date(); today.setHours(0,0,0,0);
+    if (sel < today) { setErr('f_date', 'Please select a future date.'); valid = false; } else clearErr('f_date');
+  }
+  return valid;
+}
+
+function submitAppointment() {
+  if (!validateForm()) {
+    var firstErr = document.querySelector('.invalid');
+    if (firstErr) firstErr.scrollIntoView({ behavior:'smooth', block:'center' });
+    return;
+  }
+  var fn  = document.getElementById('f_firstname').value.trim();
+  var ln  = document.getElementById('f_lastname').value.trim();
+  var ph  = document.getElementById('f_phone').value.trim();
+  var em  = document.getElementById('f_email').value.trim();
+  var sv  = document.getElementById('f_service').value;
+  var dt  = document.getElementById('f_date').value;
+  var tm  = document.getElementById('f_time').value;
+  var msg = document.getElementById('f_message').value.trim();
+  var dateStr = new Date(dt + 'T00:00:00').toLocaleDateString('en-IN', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+
+  var submitBtn = document.getElementById('submitBtn');
+  submitBtn.disabled = true;
+  submitBtn.innerHTML = '⏳ Sending...';
+
+  // Always send email via EmailJS
+  var templateParams = {
+    patient_name: fn + ' ' + ln,
+    phone: ph,
+    patient_email: em || 'Not provided',
+    service: sv,
+    date: dateStr,
+    time: tm || 'Not specified',
+    message: msg || 'No additional message'
+  };
+
+  emailjs.send('service_nv2dpxm', 'template_4d95ujp', templateParams)
+    .then(function() {
+      document.getElementById('successMsg').style.display = 'block';
+      submitBtn.disabled = false;
+      setSubmitMode(currentMode);
+      setTimeout(function() { document.getElementById('successMsg').style.display = 'none'; }, 7000);
+      // Reset form
+      ['f_firstname','f_lastname','f_phone','f_email','f_message'].forEach(function(id) { document.getElementById(id).value = ''; });
+      document.getElementById('f_service').selectedIndex = 0;
+      document.getElementById('f_time').selectedIndex = 0;
+      document.getElementById('f_date').value = '';
+    }, function(error) {
+      submitBtn.disabled = false;
+      setSubmitMode(currentMode);
+      alert('Could not send email. Please try WhatsApp or call us directly at +91 63608 93487');
+      console.error('EmailJS error:', error);
+    });
+
+  // Also send via WhatsApp or open mailto in parallel
+  if (currentMode === 'whatsapp') {
+    var lines = ['Hello Ajanta Mobility Solutions!','','I would like to book an appointment.','','*Patient Details:*','Name: '+fn+' '+ln,'Phone: '+ph];
+    if (em) lines.push('Email: '+em);
+    lines.push('','*Appointment Details:*','Service: '+sv,'Preferred Date: '+dateStr);
+    if (tm) lines.push('Preferred Time: '+tm);
+    if (msg) { lines.push(''); lines.push('Additional Details: '+msg); }
+    lines.push('','Please confirm my appointment. Thank you!');
+    setTimeout(function() { window.open('https://wa.me/916360893487?text='+lines.join('%0A'),'_blank'); }, 300);
+  } else {
+    var subj = 'Appointment Request - '+fn+' '+ln+' - '+sv;
+    var bodyLines = ['Hello Ajanta Mobility Solutions,','','I would like to book an appointment.','','Patient Details:','Name: '+fn+' '+ln,'Phone: '+ph];
+    if (em) bodyLines.push('Email: '+em);
+    bodyLines.push('','Appointment Details:','Service: '+sv,'Preferred Date: '+dateStr);
+    if (tm) bodyLines.push('Preferred Time: '+tm);
+    if (msg) { bodyLines.push(''); bodyLines.push('Additional Details:'); bodyLines.push(msg); }
+    bodyLines.push('','Please confirm my appointment. Thank you!');
+    setTimeout(function() { window.location.href = 'mailto:ajantapobhopal@gmail.com?subject='+encodeURIComponent(subj)+'&body='+encodeURIComponent(bodyLines.join('\n')); }, 300);
+  }
+}
+
+function submitForm() { submitAppointment(); }
+
+// ── SCROLL REVEAL ──
+function initReveal() {
+  var els = document.querySelectorAll('.page-section.active .service-card,.page-section.active .why-card,.page-section.active .testi-card,.page-section.active .step-item,.page-section.active .value-item,.page-section.active .contact-detail');
+  els.forEach(function(el, i) {
+    el.classList.add('reveal');
+    setTimeout(function() {
+      var obs = new IntersectionObserver(function(entries) {
+        entries.forEach(function(e) { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+      }, { threshold: 0.1 });
+      obs.observe(el);
+    }, i * 60);
+  });
+}
+
+// ── NAVBAR SCROLL ──
+window.addEventListener('scroll', function() {
+  var nav = document.querySelector('.navbar');
+  if (window.scrollY > 40) nav.classList.add('scrolled'); else nav.classList.remove('scrolled');
+});
+
+// ── COUNTER ANIMATION ──
+function animateCounters() {
+  document.querySelectorAll('.stat-num').forEach(function(el) {
+    var target = parseInt(el.textContent);
+    var suffix = el.textContent.replace(/[0-9]/g,'');
+    if (isNaN(target)) return;
+    var startTime = null;
+    function step(ts) {
+      if (!startTime) startTime = ts;
+      var p = Math.min((ts-startTime)/1800,1);
+      el.textContent = Math.floor((1-Math.pow(1-p,3))*target)+suffix;
+      if (p < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  });
+}
+
+// ── INIT ──
+window.addEventListener('DOMContentLoaded', function() {
+  var dateInput = document.getElementById('f_date');
+  if (dateInput) dateInput.setAttribute('min', new Date().toISOString().split('T')[0]);
+  setSubmitMode('whatsapp');
+  initReveal();
+  var statsEl = document.querySelector('.hero-stats');
+  if (statsEl) {
+    var obs = new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) { if (e.isIntersecting) { animateCounters(); obs.disconnect(); } });
+    }, { threshold: 0.5 });
+    obs.observe(statsEl);
+  }
+});
+</script>
+</head>
+<body>
+
+<script>
+// ── EMAILJS INIT ──
+(function() {
+  if (typeof emailjs !== 'undefined') {
+    emailjs.init({ publicKey: 'PNhKOCnSXC5I5MkND' });
+  }
+})();
+
+// ── DROPDOWN MENU (hover-safe, no gap issue) ──
+var dropdownTimer = null;
+
+function openDropdown() {
+  clearTimeout(dropdownTimer);
+  var dd = document.getElementById('servicesDropdown');
+  if (dd) dd.classList.add('open');
+}
+
+function closeDropdown() {
+  dropdownTimer = setTimeout(function() {
+    var dd = document.getElementById('servicesDropdown');
+    if (dd) dd.classList.remove('open');
+  }, 120);
+}
+
+// ── MOBILE MENU ──
+function toggleMenu() {
+  var nav = document.getElementById('navLinks');
+  var btn = document.getElementById('hamburger');
+  if (nav) nav.classList.toggle('open');
+  if (btn) btn.classList.toggle('open');
+}
+
+// ── SERVICES SCROLL NAVIGATION ──
+function goToService(sectionId) {
+  // Close dropdown immediately
+  var dd = document.getElementById('servicesDropdown');
+  if (dd) dd.classList.remove('open');
+  // Show services page
+  document.querySelectorAll('.page-section').forEach(function(s) { s.classList.remove('active'); });
+  document.getElementById('services').classList.add('active');
+  document.querySelectorAll('.nav-links > li > a').forEach(function(a) { a.classList.remove('active'); });
+  // Close mobile menu
+  var navLinks = document.getElementById('navLinks');
+  var hamburger = document.getElementById('hamburger');
+  if (navLinks) navLinks.classList.remove('open');
+  if (hamburger) hamburger.classList.remove('open');
+  // Scroll to top first, then to section
+  window.scrollTo({ top: 0, behavior: 'instant' });
+  setTimeout(function() {
+    var target = document.getElementById(sectionId);
+    if (target) {
+      var navHeight = (document.querySelector('.navbar') || {offsetHeight:70}).offsetHeight + 24;
+      var top = target.getBoundingClientRect().top + window.pageYOffset - navHeight;
+      window.scrollTo({ top: top, behavior: 'smooth' });
+    }
+  }, 120);
+  return false;
+}
+
+// ── PAGE NAVIGATION ──
+function showPage(pageId, clickedLink) {
+  document.querySelectorAll('.page-section').forEach(function(s) { s.classList.remove('active'); });
+  var target = document.getElementById(pageId);
+  if (target) target.classList.add('active');
+  document.querySelectorAll('.nav-links > li > a').forEach(function(a) { a.classList.remove('active'); });
+  if (clickedLink) clickedLink.classList.add('active');
+  var navLinks = document.getElementById('navLinks');
+  var hamburger = document.getElementById('hamburger');
+  if (navLinks) navLinks.classList.remove('open');
+  if (hamburger) hamburger.classList.remove('open');
+  var dd = document.getElementById('servicesDropdown');
+  if (dd) dd.classList.remove('open');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  setTimeout(initReveal, 100);
+  return false;
+}
+
+// ── APPOINTMENT FORM ──
+var currentMode = 'whatsapp';
+
+function setSubmitMode(mode) {
+  currentMode = mode;
+  var btnWA = document.getElementById('btnWA');
+  var btnEmail = document.getElementById('btnEmail');
+  var submitBtn = document.getElementById('submitBtn');
+  if (!btnWA || !btnEmail || !submitBtn) return;
+  if (mode === 'whatsapp') {
+    btnWA.style.cssText = 'flex:1;padding:10px;border-radius:50px;border:2px solid #25d366;background:#25d366;color:#fff;font-weight:700;font-size:13.5px;cursor:pointer;box-shadow:0 4px 16px rgba(37,211,102,.4);font-family:DM Sans,sans-serif;';
+    btnEmail.style.cssText = 'flex:1;padding:10px;border-radius:50px;border:2px solid var(--orange);background:transparent;color:var(--orange);font-weight:700;font-size:13.5px;cursor:pointer;font-family:DM Sans,sans-serif;';
+    submitBtn.innerHTML = '&#128172; Send via WhatsApp';
+    submitBtn.style.background = 'linear-gradient(135deg,#25d366,#128c7e)';
+    submitBtn.style.boxShadow = '0 6px 24px rgba(37,211,102,.35)';
+  } else {
+    btnEmail.style.cssText = 'flex:1;padding:10px;border-radius:50px;border:2px solid var(--orange);background:var(--orange);color:#fff;font-weight:700;font-size:13.5px;cursor:pointer;box-shadow:0 4px 16px rgba(232,119,34,.4);font-family:DM Sans,sans-serif;';
+    btnWA.style.cssText = 'flex:1;padding:10px;border-radius:50px;border:2px solid #25d366;background:transparent;color:#25d366;font-weight:700;font-size:13.5px;cursor:pointer;font-family:DM Sans,sans-serif;';
+    submitBtn.innerHTML = '&#9993; Send via Email';
+    submitBtn.style.background = 'linear-gradient(135deg,#e87722,#f5a03a)';
+    submitBtn.style.boxShadow = '0 6px 24px rgba(232,119,34,.35)';
+  }
+}
+
+function clearErr(fieldId) {
+  var el = document.getElementById(fieldId);
+  var err = document.getElementById('err_' + fieldId.replace('f_', ''));
+  if (el) el.classList.remove('invalid');
+  if (err) err.textContent = '';
+}
+
+function setErr(fieldId, message) {
+  var el = document.getElementById(fieldId);
+  var err = document.getElementById('err_' + fieldId.replace('f_', ''));
+  if (el) el.classList.add('invalid');
+  if (err) err.textContent = message;
+}
+
+function validateForm() {
+  var valid = true;
+  var fn = document.getElementById('f_firstname').value.trim();
+  if (!fn || fn.length < 2) { setErr('f_firstname', fn ? 'Enter a valid first name.' : 'First name is required.'); valid = false; } else clearErr('f_firstname');
+  var ln = document.getElementById('f_lastname').value.trim();
+  if (!ln || ln.length < 2) { setErr('f_lastname', ln ? 'Enter a valid last name.' : 'Last name is required.'); valid = false; } else clearErr('f_lastname');
+  var ph = document.getElementById('f_phone').value.trim().replace(/\s+/g, '');
+  if (!ph) { setErr('f_phone', 'Phone number is required.'); valid = false; }
+  else if (!/^[+]?[0-9]{10,13}$/.test(ph)) { setErr('f_phone', 'Enter a valid 10-digit phone number.'); valid = false; }
+  else clearErr('f_phone');
+  var em = document.getElementById('f_email').value.trim();
+  if (em && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)) { setErr('f_email', 'Enter a valid email address.'); valid = false; } else clearErr('f_email');
+  var sv = document.getElementById('f_service').value;
+  if (!sv) { setErr('f_service', 'Please select a service.'); valid = false; } else clearErr('f_service');
+  var dt = document.getElementById('f_date').value;
+  if (!dt) { setErr('f_date', 'Please select a preferred date.'); valid = false; }
+  else {
+    var sel = new Date(dt + 'T00:00:00'); var today = new Date(); today.setHours(0,0,0,0);
+    if (sel < today) { setErr('f_date', 'Please select a future date.'); valid = false; } else clearErr('f_date');
+  }
+  return valid;
+}
+
+function submitAppointment() {
+  if (!validateForm()) {
+    var firstErr = document.querySelector('.invalid');
+    if (firstErr) firstErr.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+  var fn  = document.getElementById('f_firstname').value.trim();
+  var ln  = document.getElementById('f_lastname').value.trim();
+  var ph  = document.getElementById('f_phone').value.trim();
+  var em  = document.getElementById('f_email').value.trim();
+  var sv  = document.getElementById('f_service').value;
+  var dt  = document.getElementById('f_date').value;
+  var tm  = document.getElementById('f_time').value;
+  var msg = document.getElementById('f_message').value.trim();
+  var dateStr = new Date(dt + 'T00:00:00').toLocaleDateString('en-IN', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+  var submitBtn = document.getElementById('submitBtn');
+  submitBtn.disabled = true;
+  submitBtn.innerHTML = '&#9203; Sending...';
+  if (typeof emailjs !== 'undefined') {
+    emailjs.send('service_nv2dpxm', 'template_4d95ujp', {
+      patient_name: fn + ' ' + ln,
+      phone: ph,
+      patient_email: em || 'Not provided',
+      service: sv,
+      date: dateStr,
+      time: tm || 'Not specified',
+      message: msg || 'No additional message'
+    }).then(function() { showSuccess(); }, function(err) { console.error('EmailJS:', err); showSuccess(); });
+  } else { showSuccess(); }
+  setTimeout(function() {
+    if (currentMode === 'whatsapp') {
+      var lines = ['Hello Ajanta Mobility Solutions!','','I would like to book an appointment.','','*Patient Details:*','Name: '+fn+' '+ln,'Phone: '+ph];
+      if (em) lines.push('Email: '+em);
+      lines.push('','*Appointment Details:*','Service: '+sv,'Preferred Date: '+dateStr);
+      if (tm) lines.push('Preferred Time: '+tm);
+      if (msg) { lines.push(''); lines.push('Additional Details: '+msg); }
+      lines.push('','Please confirm my appointment. Thank you!');
+      window.open('https://wa.me/916360893487?text='+lines.join('%0A'), '_blank');
+    } else {
+      var subj = 'Appointment Request - '+fn+' '+ln+' - '+sv;
+      var body = ['Hello Ajanta Mobility Solutions,','','Patient Details:','Name: '+fn+' '+ln,'Phone: '+ph];
+      if (em) body.push('Email: '+em);
+      body.push('','Appointment Details:','Service: '+sv,'Preferred Date: '+dateStr);
+      if (tm) body.push('Preferred Time: '+tm);
+      if (msg) { body.push(''); body.push('Additional Details: '+msg); }
+      body.push('','Thank you!');
+      window.location.href = 'mailto:ajantapobhopal@gmail.com?subject='+encodeURIComponent(subj)+'&body='+encodeURIComponent(body.join('\n'));
+    }
+  }, 400);
+}
+
+function showSuccess() {
+  var submitBtn = document.getElementById('submitBtn');
+  var successMsg = document.getElementById('successMsg');
+  if (submitBtn) { submitBtn.disabled = false; setSubmitMode(currentMode); }
+  if (successMsg) { successMsg.style.display = 'block'; setTimeout(function() { successMsg.style.display = 'none'; }, 7000); }
+  setTimeout(function() {
+    ['f_firstname','f_lastname','f_phone','f_email','f_message'].forEach(function(id) { var el=document.getElementById(id); if(el) el.value=''; });
+    var s=document.getElementById('f_service'); if(s) s.selectedIndex=0;
+    var t=document.getElementById('f_time'); if(t) t.selectedIndex=0;
+    var d=document.getElementById('f_date'); if(d) d.value='';
+  }, 1200);
+}
+
+function submitForm() { submitAppointment(); }
+
+// ── SCROLL REVEAL ──
+function initReveal() {
+  var els = document.querySelectorAll('.page-section.active .service-card,.page-section.active .why-card,.page-section.active .testi-card,.page-section.active .step-item,.page-section.active .value-item,.page-section.active .contact-detail');
+  els.forEach(function(el, i) {
+    el.classList.add('reveal');
+    setTimeout(function() {
+      var obs = new IntersectionObserver(function(entries) {
+        entries.forEach(function(e) { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+      }, { threshold: 0.1 });
+      obs.observe(el);
+    }, i * 60);
+  });
+}
+
+// ── NAVBAR SCROLL ──
+window.addEventListener('scroll', function() {
+  var nav = document.querySelector('.navbar');
+  if (!nav) return;
+  if (window.scrollY > 40) nav.classList.add('scrolled'); else nav.classList.remove('scrolled');
+});
+
+// ── COUNTER ANIMATION ──
+function animateCounters() {
+  document.querySelectorAll('.stat-num').forEach(function(el) {
+    var target = parseInt(el.textContent);
+    var suffix = el.textContent.replace(/[0-9]/g, '');
+    if (isNaN(target)) return;
+    var startTime = null;
+    function step(timestamp) {
+      if (!startTime) startTime = timestamp;
+      var progress = Math.min((timestamp - startTime) / 1800, 1);
+      var eased = 1 - Math.pow(1 - progress, 3);
+      el.textContent = Math.floor(eased * target) + suffix;
+      if (progress < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  });
+}
+
+// ── INIT ──
+window.addEventListener('DOMContentLoaded', function() {
+  // Close dropdown when clicking outside
+  document.addEventListener('click', function(e) {
+    var menu = document.getElementById('servicesMenu');
+    var dd = document.getElementById('servicesDropdown');
+    if (dd && menu && !menu.contains(e.target)) {
+      dd.classList.remove('open');
+    }
+  });
+  // Close mobile menu on nav link click
+  document.querySelectorAll('#navLinks a').forEach(function(a) {
+    a.addEventListener('click', function() {
+      var n = document.getElementById('navLinks');
+      var h = document.getElementById('hamburger');
+      if (n) n.classList.remove('open');
+      if (h) h.classList.remove('open');
+    });
+  });
+  var dateInput = document.getElementById('f_date');
+  if (dateInput) dateInput.setAttribute('min', new Date().toISOString().split('T')[0]);
+  setSubmitMode('whatsapp');
+  initReveal();
+  var statsEl = document.querySelector('.hero-stats');
+  if (statsEl) {
+    var obs = new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) { if (e.isIntersecting) { animateCounters(); obs.disconnect(); } });
+    }, { threshold: 0.5 });
+    obs.observe(statsEl);
+  }
+});
+</script>
+</body>
+</html>
